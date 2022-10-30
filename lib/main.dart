@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,17 +30,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _token = '';
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late Future<String> _token;
   List<dynamic> _monitors = [
     {'ID': 'test'}
   ];
   String api_host = 'https://nuvyp2kffa.execute-api.us-east-2.amazonaws.com';
-  void _change_text(val) {
+  Future<void> _change_text(val) async {
+    final SharedPreferences prefs = await _prefs;
     setState(() {
-      _token = val;
+      _token = prefs.setString('token', val).then((bool success) {
+        return val;
+      });
       Map<String, String> requestHeaders = {
         'Accept': 'application/json',
-        'Authorization': 'token $_token'
+        'Authorization': 'token $val'
       };
       http
           .get(Uri.parse('$api_host/monitor'), headers: requestHeaders)
@@ -53,6 +58,14 @@ class _HomeState extends State<Home> {
           print("error");
         }
       });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _token = _prefs.then((SharedPreferences prefs) {
+      return prefs.getString('token') ?? 'Paste your token here';
     });
   }
 
