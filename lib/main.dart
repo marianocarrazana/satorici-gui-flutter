@@ -32,32 +32,32 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<String> _token;
-  List<dynamic> _monitors = [
-    {'ID': 'test'}
-  ];
+  List<dynamic> _monitors = [];
   String api_host = 'https://nuvyp2kffa.execute-api.us-east-2.amazonaws.com';
   Future<void> _change_text(val) async {
     final SharedPreferences prefs = await _prefs;
-    setState(() {
-      _token = prefs.setString('token', val).then((bool success) {
-        return val;
-      });
-      Map<String, String> requestHeaders = {
-        'Accept': 'application/json',
-        'Authorization': 'token $val'
-      };
-      http
-          .get(Uri.parse('$api_host/monitor'), headers: requestHeaders)
-          .then((response) {
-        if (response.statusCode == 200) {
+    _token = prefs.setString('token', val).then((bool success) {
+      print('Saved: $val');
+      return val;
+    });
+    Map<String, String> requestHeaders = {
+      'Accept': 'application/json',
+      'Authorization': 'token $val'
+    };
+    http
+        .get(Uri.parse('$api_host/monitor'), headers: requestHeaders)
+        .then((response) {
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
           _monitors = jsonDecode(response.body);
-          // for (var mon in monitors) {
-          //   print(mon['ID']);
-          // }
-        } else {
-          print("error");
-        }
-      });
+        });
+        // for (var mon in monitors) {
+        //   print(mon['ID']);
+        // }
+      } else {
+        print("error");
+      }
     });
   }
 
@@ -65,7 +65,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _token = _prefs.then((SharedPreferences prefs) {
-      return prefs.getString('token') ?? 'Paste your token here';
+      var token = prefs.getString('token') ?? 'Paste your token here';
+      print(prefs.getString('token'));
+      _change_text(token);
+      return token;
     });
   }
 
@@ -84,14 +87,11 @@ class _HomeState extends State<Home> {
               ),
             )),
         Container(
-            margin: EdgeInsets.all(25.0),
-            child: Row(children: <Widget>[
-              Expanded(
-                  child: MonitorList(
-                monitors: _monitors,
-              )),
-              Text('Reports List'),
-            ]))
+            margin: const EdgeInsets.all(25.0),
+            height: 500,
+            child: MonitorList(
+              monitors: _monitors,
+            ))
       ],
     );
   }
@@ -110,8 +110,8 @@ class _MonitorListState extends State<MonitorList> {
     var listings = <Widget>[];
     for (var mon in widget.monitors) {
       listings.add(Container(
-          margin: EdgeInsets.all(5.0),
           color: Colors.blue[600],
+          margin: const EdgeInsets.all(20),
           child: Column(children: [
             for (var key in mon.keys)
               Row(
@@ -124,6 +124,6 @@ class _MonitorListState extends State<MonitorList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: _getListings());
+    return ListView(padding: const EdgeInsets.all(2), children: _getListings());
   }
 }
