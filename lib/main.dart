@@ -110,8 +110,22 @@ class _MonitorListState extends State<MonitorList> {
     var listings = <Widget>[];
     for (var mon in widget.monitors) {
       listings.add(Container(
-          color: Colors.blue[600],
+          decoration: BoxDecoration(
+            border: Border.all(color: Color.fromARGB(95, 0, 0, 0), width: 1),
+            borderRadius: BorderRadius.circular(5),
+            gradient: LinearGradient(colors: [
+              Color.fromARGB(255, 134, 183, 255),
+              Colors.blueAccent
+            ]),
+            boxShadow: [
+              BoxShadow(
+                  color: Color.fromARGB(108, 11, 23, 33),
+                  offset: new Offset(4, 4),
+                  blurRadius: 6),
+            ],
+          ),
           margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           child: Column(children: [
             for (var key in mon.keys)
               Row(
