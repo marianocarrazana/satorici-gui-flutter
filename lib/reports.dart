@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class Reports extends StatelessWidget {
 }
 
 class MonitorList extends StatelessWidget {
-  final monitors;
+  final List monitors;
 
   const MonitorList({super.key, required this.monitors});
   List<Widget> _getListings() {
@@ -59,37 +60,50 @@ class MonitorList extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Color.fromARGB(95, 0, 0, 0), width: 1),
             borderRadius: BorderRadius.circular(5),
-            gradient: LinearGradient(colors: [
+            gradient: const LinearGradient(colors: [
               Color.fromARGB(255, 32, 101, 204),
               Color.fromARGB(255, 15, 46, 101)
             ]),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Color.fromARGB(108, 11, 23, 33),
-                  offset: new Offset(4, 4),
+                  offset: Offset(4, 4),
                   blurRadius: 6),
             ],
           ),
           margin: const EdgeInsets.all(20),
           padding: const EdgeInsets.all(10),
-          child: Column(children: [
-            for (var key in mon.keys)
-              Row(
-                children: [
-                  Text('$key: '),
-                  Text(
-                    mon[key] != null ? mon[key] : 'None',
-                    overflow: TextOverflow.ellipsis,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (var key in mon.keys)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('$key: '),
+                      Expanded(
+                          child: Text(
+                        mon[key] ?? 'None',
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        softWrap: false,
+                      ))
+                    ],
                   )
-                ],
-              )
-          ])));
+              ])));
     }
     return listings;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(padding: const EdgeInsets.all(2), children: _getListings());
+    var columns = max((MediaQuery.of(context).size.width ~/ 480).toInt(), 1);
+    var widthColumns = MediaQuery.of(context).size.width / columns;
+    var aspectRatio = widthColumns / 220;
+    return GridView.count(
+        crossAxisCount: columns,
+        childAspectRatio: aspectRatio,
+        padding: const EdgeInsets.all(2),
+        children: _getListings());
   }
 }
