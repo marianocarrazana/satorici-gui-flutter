@@ -6,19 +6,19 @@ import 'package:http/http.dart' as http;
 
 import 'config_controller.dart';
 
-class MonitorController extends GetxController {
+class ReportsController extends GetxController {
   final _monitors = RxList([]);
   List get monitors => _monitors.value;
   updateMonitors(newList) => _monitors.value = newList;
 }
 
-class Monitor extends StatelessWidget {
-  const Monitor({super.key});
+class Reports extends StatelessWidget {
+  const Reports({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ConfigController c = Get.find();
-    final MonitorController m = Get.put(MonitorController());
+    final ReportsController m = Get.put(ReportsController());
     String token = c.token;
     Map<String, String> requestHeaders = {
       'Accept': 'application/json',
@@ -26,7 +26,7 @@ class Monitor extends StatelessWidget {
     };
     var apiHost = c.api_host;
     http
-        .get(Uri.parse('$apiHost/monitor'), headers: requestHeaders)
+        .get(Uri.parse('$apiHost/ci'), headers: requestHeaders)
         .then((response) {
       print(response.body);
       if (response.statusCode == 200) {
@@ -55,6 +55,7 @@ class MonitorList extends StatelessWidget {
     var listings = <Widget>[];
     for (var mon in monitors) {
       listings.add(Container(
+          clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             border: Border.all(color: Color.fromARGB(95, 0, 0, 0), width: 1),
             borderRadius: BorderRadius.circular(5),
@@ -74,7 +75,13 @@ class MonitorList extends StatelessWidget {
           child: Column(children: [
             for (var key in mon.keys)
               Row(
-                children: [Text('$key: '), Text(mon[key])],
+                children: [
+                  Text('$key: '),
+                  Text(
+                    mon[key] != null ? mon[key] : 'None',
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
               )
           ])));
     }

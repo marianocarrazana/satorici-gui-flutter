@@ -27,13 +27,16 @@ class SplitView extends StatelessWidget {
             child: AppMenu(),
           ),
           Container(width: 0.5, color: Colors.black),
-          Expanded(child: content),
+          Expanded(
+              child: Scaffold(
+                  body: content, appBar: AppBar(title: Text('Satori CI')))),
         ],
       ));
     } else {
       // narrow screen: show content, menu inside drawer
       return Scaffold(
         body: content,
+        appBar: AppBar(title: Text('Satori CI')),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(

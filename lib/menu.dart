@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class AppMenu extends StatelessWidget {
   final _pageList = {
     'Home': '/home',
-    'Reports': '/reports',
+    'CI': '/reports',
     'Monitor': '/monitor',
   };
   @override
