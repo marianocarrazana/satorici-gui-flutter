@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'config_controller.dart';
+import 'frosted_container.dart';
 
 class MonitorController extends GetxController {
   final _monitors = RxList([]);
@@ -28,11 +30,11 @@ class Monitor extends StatelessWidget {
     http
         .get(Uri.parse('$apiHost/monitor'), headers: requestHeaders)
         .then((response) {
-      print(response.body);
+      log(response.body);
       if (response.statusCode == 200) {
         m.updateMonitors(jsonDecode(response.body));
       } else {
-        print("error");
+        log("error");
       }
     });
     return Column(
@@ -54,29 +56,26 @@ class MonitorList extends StatelessWidget {
   List<Widget> _getListings() {
     var listings = <Widget>[];
     for (var mon in monitors) {
-      listings.add(Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Color.fromARGB(95, 0, 0, 0), width: 1),
-            borderRadius: BorderRadius.circular(5),
-            gradient: LinearGradient(colors: [
-              Color.fromARGB(255, 32, 101, 204),
-              Color.fromARGB(255, 15, 46, 101)
-            ]),
-            boxShadow: [
-              BoxShadow(
-                  color: Color.fromARGB(108, 11, 23, 33),
-                  offset: new Offset(4, 4),
-                  blurRadius: 6),
-            ],
-          ),
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(10),
-          child: Column(children: [
-            for (var key in mon.keys)
-              Row(
-                children: [Text('$key: '), Text(mon[key])],
-              )
-          ])));
+      listings.add(FrostedContainer(
+          padding:10,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (var key in mon.keys)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('$key: '),
+                      Expanded(
+                          child: Text(
+                        mon[key] ?? 'None',
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        softWrap: false,
+                      ))
+                    ],
+                  )
+              ])));
     }
     return listings;
   }

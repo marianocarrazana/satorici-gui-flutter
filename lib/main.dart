@@ -21,16 +21,25 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
         title: 'SAPP',
-        defaultTransition: Transition.noTransition,
+        defaultTransition: Transition.fadeIn,
         initialRoute: '/home',
-        theme: ThemeData.dark(),
+        theme: ThemeData.light(),
         getPages: [
-          GetPage(name: '/home', page: () => SplitView(content: Home())),
+          GetPage(
+              name: '/home',
+              page: () => SplitView(
+                    content: Home(),
+                    hue: 197,
+                  )),
           GetPage(
               name: '/reports',
-              page: () => const SplitView(content: Reports())),
+              page: () => const SplitView(
+                    content: Reports(),
+                    hue: 149,
+                  )),
           GetPage(
-              name: '/monitor', page: () => const SplitView(content: Monitor()))
+              name: '/monitor',
+              page: () => const SplitView(content: Monitor(), hue: 97))
         ]);
   }
 }

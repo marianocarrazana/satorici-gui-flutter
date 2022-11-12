@@ -1,6 +1,7 @@
 // app_menu.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:satori_app/frosted_container.dart';
 
 class AppMenu extends StatelessWidget {
   final _pageList = {
@@ -10,10 +11,9 @@ class AppMenu extends StatelessWidget {
   };
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Menu')),
-      body: ListView(
-        // Note: use ListView.builder if there are many items
+    return FrostedContainer(
+      margin: 12.0,
+        child:ListView(
         children: <Widget>[
           // iterate through the keys to get the page names
           for (String pageName in _pageList.keys)
@@ -22,8 +22,7 @@ class AppMenu extends StatelessWidget {
               onPressed: () => Get.toNamed(_pageList[pageName]!),
             ),
         ],
-      ),
-    );
+      ),);
   }
 }
 
