@@ -3,50 +3,57 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:satori_app/frosted_container.dart';
 
+import 'config_controller.dart';
+
 class AppMenu extends StatelessWidget {
-  final _pageList = {
-    'Home': '/home',
-    'CI': '/reports',
-    'Monitor': '/monitor',
-  };
+  final List _pageList = [
+    {'title': 'Home', 'route': '/home', 'icon': Icons.home},
+    {'title': 'Reports', 'route': '/reports', 'icon': Icons.featured_play_list},
+    {'title': 'CI', 'route': '/ci', 'icon': Icons.dashboard},
+    {'title': 'Monitor', 'route': '/monitor', 'icon': Icons.av_timer},
+  ];
   @override
   Widget build(BuildContext context) {
     return FrostedContainer(
       margin: 12.0,
-        child:ListView(
+      child: ListView(
         children: <Widget>[
           // iterate through the keys to get the page names
-          for (String pageName in _pageList.keys)
-            PageListTile(
-              pageName: pageName,
-              onPressed: () => Get.toNamed(_pageList[pageName]!),
-            ),
+          for (var page in _pageList)
+            Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Get.currentRoute.toString() == page['route']
+                      ? Colors.white.withOpacity(.6)
+                      : Colors.transparent,
+                ),
+                child: PageListTile(
+                  pageData: page,
+                  onPressed: () => Get.toNamed(page['route']!),
+                )),
         ],
-      ),);
+      ),
+    );
   }
 }
 
 class PageListTile extends StatelessWidget {
   const PageListTile({
     Key? key,
-    this.selectedPageName,
-    required this.pageName,
+    required this.pageData,
     this.onPressed,
   }) : super(key: key);
-  final String? selectedPageName;
-  final String pageName;
+  final Map pageData;
   final VoidCallback? onPressed;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // show a check icon if the page is currently selected
-      // note: we use Opacity to ensure that all tiles have a leading widget
-      // and all the titles are left-aligned
-      leading: Opacity(
-        opacity: selectedPageName == pageName ? 1.0 : 0.0,
-        child: Icon(Icons.check),
+      leading: Icon(pageData['icon']),
+      title: Text(
+        pageData['title'],
+        textAlign: TextAlign.left,
+        textScaleFactor: 1.5,
       ),
-      title: Text(pageName),
       onTap: onPressed,
     );
   }

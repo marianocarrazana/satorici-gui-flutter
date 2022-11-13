@@ -4,23 +4,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:satori_app/responsive_grid.dart';
 
 import 'config_controller.dart';
-import 'responsive_grid.dart';
 
-class MonitorController extends GetxController {
+class CIController extends GetxController {
   final _monitors = RxList([]);
   List get monitors => _monitors.value;
   updateMonitors(newList) => _monitors.value = newList;
 }
 
-class Monitor extends StatelessWidget {
-  const Monitor({super.key});
+class CI extends StatelessWidget {
+  const CI({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ConfigController c = Get.find();
-    final MonitorController m = Get.put(MonitorController());
+    final CIController m = Get.put(CIController());
     String token = c.token;
     Map<String, String> requestHeaders = {
       'Accept': 'application/json',
@@ -28,7 +28,7 @@ class Monitor extends StatelessWidget {
     };
     var apiHost = c.api_host;
     http
-        .get(Uri.parse('$apiHost/monitor'), headers: requestHeaders)
+        .get(Uri.parse('$apiHost/ci'), headers: requestHeaders)
         .then((response) {
       log(response.body);
       if (response.statusCode == 200) {
