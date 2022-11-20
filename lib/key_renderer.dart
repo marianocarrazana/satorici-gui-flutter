@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class KeyRenderer extends StatelessWidget {
@@ -14,7 +16,7 @@ class KeyRenderer extends StatelessWidget {
             Text('$key: '),
             Expanded(
                 child: Text(
-              objList[key] ?? 'None',
+              json.encode(objList[key]),
               overflow: TextOverflow.fade,
               maxLines: 1,
               softWrap: false,

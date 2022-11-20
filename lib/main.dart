@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'commits.dart';
 import 'config_controller.dart';
 import 'home.dart';
 import 'monitor.dart';
-import 'ci.dart';
+import 'repos.dart';
+import 'reports.dart';
 import 'splitview.dart';
 
 void main() async {
@@ -29,20 +31,29 @@ class MyApp extends StatelessWidget {
               name: '/home',
               page: () => const SplitView(
                     content: Home(),
-                    hue: 197,
+                    hue: 238,
+                    command: "satori-cli",
                   )),
+          GetPage(
+              name: '/reports',
+              page: () => const SplitView(
+                  content: Reports(),
+                  hue: 38,
+                  command: "satori-cli reports all")),
+          GetPage(
+              name: '/commits',
+              page: () => const SplitView(
+                  content: Commits(),
+                  hue: 298,
+                  command: "satori-cli reports all")),
           GetPage(
               name: '/ci',
               page: () => const SplitView(
-                    content: CI(),
-                    hue: 149,
-                  )),
+                  content: Repos(), hue: 138, command: "satori-cli ci")),
           GetPage(
               name: '/monitor',
-              page: () => const SplitView(content: Monitor(), hue: 97)),
-          GetPage(
-              name: '/reports',
-              page: () => const SplitView(content: Home(), hue: 49))
+              page: () => const SplitView(
+                  content: Monitor(), hue: 98, command: "satori-cli monitor")),
         ]);
   }
 }

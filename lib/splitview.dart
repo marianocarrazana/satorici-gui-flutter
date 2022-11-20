@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hsluv/hsluvcolor.dart';
 
 import 'menu.dart';
 
@@ -9,31 +11,23 @@ class SplitView extends StatelessWidget {
       // these values are now configurable with sensible default values
       this.breakpoint = 600,
       this.menuWidth = 240,
-      this.hue})
+      this.hue,
+      required this.command})
       : super(key: key);
   final Widget content;
   final double breakpoint;
   final double menuWidth;
   final double? hue;
+  final String command;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= breakpoint) {
-      // widescreen: menu on the left, content on the right
+      // desktop
       return Scaffold(
-          body: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    transform: GradientRotation(0.78),
-                    begin: Alignment.topCenter,
-                    end: Alignment.center,
-                    tileMode: TileMode.repeated,
-                    colors: <Color>[
-                      HSLColor.fromAHSL(1, hue ?? 0, 1, 0.55).toColor(),
-                      HSLColor.fromAHSL(1, hue ?? 0, 0.9, 0.48).toColor()
-                    ]),
-              ),
+          body: GradientContainer(
+              hue: hue ?? 47,
               child: Row(
                 children: [
                   SizedBox(
@@ -41,24 +35,86 @@ class SplitView extends StatelessWidget {
                     child: AppMenu(),
                   ),
                   Expanded(
-                      child: Scaffold(
-                    backgroundColor: Color.fromARGB(0, 0, 0, 0),
-                    body: content,
-                  )),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    const snackBar = SnackBar(
+                                        content: Text(
+                                            'Command copied to clipboard'));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Clipboard.setData(
+                                        ClipboardData(text: command));
+                                  },
+                                  child: Container(
+                                      margin: const EdgeInsets.all(8),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 8),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                      ),
+                                      child: Row(children: [
+                                        Expanded(
+                                            child: Text(
+                                          command,
+                                          style: const TextStyle(color: Colors.white),
+                                        )),
+                                        const Icon(
+                                          Icons.content_copy,
+                                          color: Colors.white,
+                                        )
+                                      ])))),
+                          Expanded(child: content)
+                        ]),
+                  ),
                 ],
               )));
     } else {
-      // narrow screen: show content, menu inside drawer
+      // mobile
       return Scaffold(
-        body: content,
-        appBar: AppBar(title: Text('Satori CI')),
+        body: GradientContainer(hue: hue ?? 47, child: content),
+        appBar: AppBar(
+          title: const Text('Satori CI'),
+          backgroundColor: HSLColor.fromAHSL(1, hue ?? 0, 1, 0.475).toColor(),
+        ),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(
+            backgroundColor: HSLColor.fromAHSL(1, hue ?? 0, 1, 0.475).toColor(),
             child: AppMenu(),
           ),
         ),
       );
     }
+  }
+}
+
+class GradientContainer extends StatelessWidget {
+  final double hue;
+  final Widget child;
+
+  const GradientContainer({super.key, required this.hue, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              transform: GradientRotation(0.78),
+              begin: Alignment.topCenter,
+              end: Alignment.center,
+              tileMode: TileMode.repeated,
+              colors: <Color>[
+                HSLuvColor.fromHSL(hue, 100, 70).toColor(),
+                HSLuvColor.fromHSL(hue, 95, 45).toColor(),
+              ]),
+        ),
+        child: child);
   }
 }

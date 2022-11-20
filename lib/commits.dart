@@ -4,19 +4,19 @@ import 'package:get/get.dart';
 import 'api_handler.dart';
 import 'responsive_grid.dart';
 
-class MonitorController extends GetxController {
+class CommitsController extends GetxController {
   final _list = RxList([]);
   List get list => _list.value;
   updateList(newList) => _list.value = newList;
 }
 
-class Monitor extends StatelessWidget {
-  const Monitor({super.key});
+class Commits extends StatelessWidget {
+  const Commits({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MonitorController m = Get.put(MonitorController());
-    getFromApi('monitor', m);
+    final CommitsController m = Get.put(CommitsController());
+    getFromApi('report/info?repo=all', m);
     return Obx(() => ResponsiveGrid(
           elements: m.list,
         ));
