@@ -31,14 +31,14 @@ class MyApp extends StatelessWidget {
               name: '/home',
               page: () => const SplitView(
                     content: Home(),
-                    hue: 238,
+                    hue: 138,
                     command: "satori-cli",
                   )),
           GetPage(
               name: '/reports',
               page: () => const SplitView(
                   content: Reports(),
-                  hue: 38,
+                  hue: 238,
                   command: "satori-cli reports all")),
           GetPage(
               name: '/commits',
@@ -47,9 +47,9 @@ class MyApp extends StatelessWidget {
                   hue: 298,
                   command: "satori-cli reports all")),
           GetPage(
-              name: '/ci',
+              name: '/repos',
               page: () => const SplitView(
-                  content: Repos(), hue: 138, command: "satori-cli ci")),
+                  content: Repos(), hue: 38, command: "satori-cli ci")),
           GetPage(
               name: '/monitor',
               page: () => const SplitView(

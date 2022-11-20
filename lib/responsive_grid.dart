@@ -28,7 +28,7 @@ class ResponsiveGrid extends StatelessWidget {
     //0=loading, 1=loaded, 2=cached, 3=error
     switch (c.status) {
       case 0:
-        return Center(
+        return const Center(
             child: CircularProgressIndicator(
           color: Colors.white,
         ));

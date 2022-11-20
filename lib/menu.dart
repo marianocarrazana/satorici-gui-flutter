@@ -10,7 +10,7 @@ class AppMenu extends StatelessWidget {
     {'title': 'Home', 'route': '/home', 'icon': Icons.home},
     {'title': 'Reports', 'route': '/reports', 'icon': Icons.featured_play_list},
     {'title': 'Commits', 'route': '/commits', 'icon': Icons.commit},
-    {'title': 'Repos', 'route': '/ci', 'icon': Icons.dashboard},
+    {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard},
     {'title': 'Monitor', 'route': '/monitor', 'icon': Icons.av_timer},
   ];
   @override
