@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:satori_app/responsive_grid.dart';
+import 'package:satori_app/grid_renderer.dart';
 
 import 'api_handler.dart';
 
@@ -17,7 +17,7 @@ class Repos extends StatelessWidget {
   Widget build(BuildContext context) {
     final ReposController m = Get.put(ReposController());
     getFromApi('ci', m);
-    return Obx(() => ResponsiveGrid(
+    return Obx(() => GridRenderer(
           elements: m.list,
         ));
   }

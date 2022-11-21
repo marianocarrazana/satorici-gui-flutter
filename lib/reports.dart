@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math' as math;
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -9,7 +7,9 @@ import 'package:get/get.dart';
 import 'api_handler.dart';
 import 'config_controller.dart';
 import 'frosted_container.dart';
-import 'key_renderer.dart';
+import 'report.dart';
+import 'responsive_grid.dart';
+import 'splitview.dart';
 
 class ReportsController extends GetxController {
   final _list = RxList([]);
@@ -33,53 +33,70 @@ class Reports extends StatelessWidget {
         }
       }
       listings.add(FrostedContainer(
+          hoverEffect: true,
+          onTap: () => Get.to(SplitView(
+              content: Report(uuid: report["UUID"]),
+              hue: 358,
+              command: "satori-cli report ${report["UUID"]}")),
+          cursor: SystemMouseCursors.click,
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(children: [
-            Expanded(
-                child: Text(
-              report["UUID"],
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-              overflow: TextOverflow.fade,
-              softWrap: false,
-            )),
-            TextStatus(report["Result"] ?? "Unknown")
-          ]),
-          Expanded(child: Column(children: testCases)),
-          if (report['Errors'] != null)
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: Row(children: [
-                  Text(
-                    "Errors: ",
-                    style: TextStyle(color: Colors.red, fontSize: 9),
-                  ),
-                  Expanded(
-                      child: Text(report['Errors'],
-                          overflow: TextOverflow.fade,
-                          maxLines: 1,
-                          softWrap: false,
-                          style: TextStyle(color: Colors.white, fontSize: 9))),
-                ])),
-          Row(children: [
-            Expanded(child: Text(report["Time required"] ?? "-")),
-            Expanded(
-                child: Text(
-              report["User"],
-              softWrap: false,
-              overflow: TextOverflow.ellipsis,
-            )),
-            Text(
-              mon['Date'],
-              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
-            )
-          ])
-        ],
-      )));
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(children: [
+                Expanded(
+                    child: Text(
+                  report["UUID"],
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 12),
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                )),
+                TextStatus(report["Result"] ?? "Unknown")
+              ]),
+              Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                    ...testCases,
+                    if (report['Errors'] != null)
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 4),
+                              margin: const EdgeInsets.symmetric(vertical: 4),
+                              decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Errors: ",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Expanded(
+                                        child: Text(report['Errors'],
+                                            overflow: TextOverflow.fade,
+                                            style: const TextStyle(
+                                                color: Colors.white))),
+                                  ])))
+                  ])),
+              Row(children: [
+                Expanded(child: Text(report["Time required"] ?? "-")),
+                Expanded(
+                    child: Text(
+                  report["User"],
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                )),
+                Text(
+                  mon['Date'],
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                )
+              ])
+            ],
+          )));
     }
     return listings;
   }
@@ -88,37 +105,9 @@ class Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     final ReportsController m = Get.put(ReportsController());
     getFromApi('report/info?repo=all', m);
-    return Obx(() => ResponsiveGrid2(
+    return Obx(() => ResponsiveGrid(
           elements: _getListings(),
         ));
-  }
-}
-
-class ResponsiveGrid2 extends StatelessWidget {
-  const ResponsiveGrid2({super.key, required this.elements});
-  final List<Widget> elements;
-
-  @override
-  Widget build(BuildContext context) {
-    final ConfigController c = Get.find();
-    //0=loading, 1=loaded, 2=cached, 3=error
-    switch (c.status) {
-      case 0:
-        return const Center(
-            child: CircularProgressIndicator(
-          color: Colors.white,
-        ));
-      default:
-        var columns =
-            math.max((MediaQuery.of(context).size.width ~/ 480).toInt(), 1);
-        var widthColumns = MediaQuery.of(context).size.width / columns;
-        var aspectRatio = widthColumns / 220;
-        return GridView.count(
-            crossAxisCount: columns,
-            childAspectRatio: aspectRatio,
-            padding: const EdgeInsets.all(2),
-            children: elements);
-    }
   }
 }
 

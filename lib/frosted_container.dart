@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class FrostedContainer extends StatelessWidget {
+class FrostedContainer extends StatefulWidget {
   const FrostedContainer(
       {super.key,
       required this.child,
@@ -11,7 +12,10 @@ class FrostedContainer extends StatelessWidget {
       this.padding = 8.0,
       this.opacity = 0.37,
       this.borderColor,
-      this.borderWidth = 2.0});
+      this.borderWidth = 2.0,
+      this.cursor = MouseCursor.defer,
+      this.hoverEffect = false,
+      this.onTap});
   final Widget child;
   final double blur;
   final double radius;
@@ -20,52 +24,80 @@ class FrostedContainer extends StatelessWidget {
   final double opacity;
   final Color? borderColor;
   final double borderWidth;
+  final MouseCursor cursor;
+  final bool hoverEffect;
+  final void Function()? onTap;
+  @override
+  State<FrostedContainer> createState() => _FrostedContainer();
+}
+
+class _FrostedContainer extends State<FrostedContainer> {
+  bool _isHover = false;
+
+  void updateIsHover(newState) {
+    setState(() {
+      _isHover = newState;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-        child: Stack(
-      children: [
-        Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
+    return MouseRegion(
+        cursor: widget.cursor,
+        onEnter: widget.hoverEffect ? (event) => updateIsHover(true) : null,
+        onExit: widget.hoverEffect ? (event) => updateIsHover(false) : null,
+        child: GestureDetector(
+            onTap: widget.onTap,
             child: Container(
-              margin: EdgeInsets.all(margin),
-              decoration: BoxDecoration(
-                  border:
-                      Border.all(width: borderWidth, color: Colors.transparent),
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(radius)),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromARGB(100, 11, 23, 33),
-                        blurStyle: BlurStyle.outer,
-                        blurRadius: 5),
-                  ]),
-            )),
-        Container(
-            margin: EdgeInsets.all(margin),
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                child: Container(
-                  clipBehavior: Clip.hardEdge,
-                  padding: EdgeInsets.all(padding),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        width: borderWidth,
-                        color:
-                            borderColor ?? Color.fromARGB(100, 255, 255, 255)),
-                    color: Colors.white.withOpacity(opacity),
-                    borderRadius: BorderRadius.all(Radius.circular(radius)),
-                  ),
-                  child: child,
-                ),
-              ),
-            ))
-      ],
-    ));
+                color: Colors.transparent,
+                child: Stack(
+                  children: [
+                    Positioned(
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          margin: EdgeInsets.all(widget.margin),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: widget.borderWidth,
+                                  color: Colors.transparent),
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(widget.radius)),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Color.fromARGB(100, 11, 23, 33),
+                                    blurStyle: BlurStyle.outer,
+                                    blurRadius: 5),
+                              ]),
+                        )),
+                    Container(
+                        margin: EdgeInsets.all(widget.margin),
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                                sigmaX: widget.blur, sigmaY: widget.blur),
+                            child: AnimatedContainer(
+                              clipBehavior: Clip.hardEdge,
+                              padding: EdgeInsets.all(widget.padding),
+                              duration: Duration(milliseconds: 300),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: widget.borderWidth,
+                                    color: widget.borderColor ??
+                                        Color.fromARGB(100, 255, 255, 255)),
+                                color: Colors.white.withOpacity(
+                                    _isHover ? .75 : widget.opacity),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(widget.radius)),
+                              ),
+                              child: widget.child,
+                            ),
+                          ),
+                        ))
+                  ],
+                ))));
   }
 }

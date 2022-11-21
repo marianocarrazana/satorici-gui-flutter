@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'config_controller.dart';
 
-getFromApi(url, m) {
+getFromApi(url, m, {bool forceReload = false}) {
   final ConfigController c = Get.find();
   final getConnect = GetConnect();
   getConnect.timeout = const Duration(minutes: 1);
@@ -15,9 +15,7 @@ getFromApi(url, m) {
     'Authorization': 'token $token'
   };
   String apiHost = 'https://nuvyp2kffa.execute-api.us-east-2.amazonaws.com';
-  if (m.list.isNotEmpty) {
-    c.updateStatus(2);
-  } else {
+  if (m.list.isEmpty || forceReload) {
     c.updateStatus(0);
     log('$apiHost/$url');
     getConnect.get('$apiHost/$url', headers: requestHeaders).then((response) {
@@ -32,5 +30,7 @@ getFromApi(url, m) {
     }).catchError((e) {
       log(e.toString());
     });
+  } else {
+    c.updateStatus(2);
   }
 }

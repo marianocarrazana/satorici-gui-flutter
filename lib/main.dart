@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'report.dart';
 import 'commits.dart';
 import 'config_controller.dart';
 import 'home.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
               name: '/monitor',
               page: () => const SplitView(
                   content: Monitor(), hue: 98, command: "satori-cli monitor")),
+
         ]);
   }
 }
