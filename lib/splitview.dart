@@ -63,7 +63,8 @@ class SplitView extends StatelessWidget {
                                         Expanded(
                                             child: Text(
                                           command,
-                                          style: const TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         )),
                                         const Icon(
                                           Icons.content_copy,
@@ -81,12 +82,12 @@ class SplitView extends StatelessWidget {
         body: GradientContainer(hue: hue ?? 47, child: content),
         appBar: AppBar(
           title: const Text('Satori CI'),
-          backgroundColor: HSLColor.fromAHSL(1, hue ?? 0, 1, 0.475).toColor(),
+          backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
         ),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(
-            backgroundColor: HSLColor.fromAHSL(1, hue ?? 0, 1, 0.475).toColor(),
+            backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
             child: AppMenu(),
           ),
         ),

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'api_handler.dart';
-import 'config_controller.dart';
 import 'frosted_container.dart';
 import 'report.dart';
 import 'responsive_grid.dart';
 import 'splitview.dart';
+import 'text_status.dart';
 
 class ReportsController extends GetxController {
   final _list = RxList([]);
@@ -34,7 +34,7 @@ class Reports extends StatelessWidget {
       }
       listings.add(FrostedContainer(
           hoverEffect: true,
-          onTap: () => Get.to(SplitView(
+          onTap: () => Get.to(() => SplitView(
               content: Report(uuid: report["UUID"]),
               hue: 358,
               command: "satori-cli report ${report["UUID"]}")),
@@ -108,34 +108,5 @@ class Reports extends StatelessWidget {
     return Obx(() => ResponsiveGrid(
           elements: _getListings(),
         ));
-  }
-}
-
-class TextStatus extends StatelessWidget {
-  const TextStatus(this.data, {super.key});
-  final String? data;
-
-  @override
-  Widget build(BuildContext context) {
-    final isSuccess = RegExp(r'(Pass|Completed)$');
-    final isFail = RegExp(r'Fail(\([\w]+\))?$');
-    String data = this.data ?? '';
-    Widget icon;
-    var iconSize = 14.0;
-    if (isSuccess.hasMatch(data)) {
-      icon = Icon(
-        Icons.check_circle,
-        color: Color.fromARGB(255, 63, 255, 70),
-        size: iconSize,
-      );
-    } else if (isFail.hasMatch(data)) {
-      icon = Icon(Icons.cancel,
-          color: Color.fromARGB(255, 255, 59, 45), size: iconSize);
-    } else {
-      icon = Icon(Icons.error, color: Colors.orange, size: iconSize);
-    }
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [icon, Text(data)]);
   }
 }
