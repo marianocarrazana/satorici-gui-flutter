@@ -9,7 +9,7 @@ import 'frosted_container.dart';
 import 'report.dart';
 import 'responsive_grid.dart';
 import 'splitview.dart';
-import 'text_status.dart';
+import 'text_widgets.dart';
 
 class ReportsController extends GetxController {
   final _list = RxList([]);

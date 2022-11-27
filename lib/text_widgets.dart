@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class TextStatus extends StatelessWidget {
   const TextStatus(this.data, {super.key});
-  final String? data;
+  final String data;
 
   @override
   Widget build(BuildContext context) {
     final isSuccess = RegExp(r'(Pass|Completed)$');
     final isFail = RegExp(r'Fail(\([\w]+\))?$');
-    String data = this.data ?? '';
+    String data = this.data;
     Widget icon;
     var iconSize = 14.0;
     if (isSuccess.hasMatch(data)) {
@@ -26,5 +26,20 @@ class TextStatus extends StatelessWidget {
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [icon, Text(data)]);
+  }
+}
+
+class TextLabel extends StatelessWidget {
+  const TextLabel(this.label, this.data, {super.key});
+  final String label;
+  final String data;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text("$label: ",style: TextStyle(fontWeight: FontWeight.bold),),
+        Text(data)
+      ],
+    );
   }
 }

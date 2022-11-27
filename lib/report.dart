@@ -8,7 +8,7 @@ import 'package:satori_app/report_chart.dart';
 import 'frosted_container.dart';
 import 'api_handler.dart';
 import 'key_renderer.dart';
-import 'text_status.dart';
+import 'text_widgets.dart';
 
 class ReportController extends GetxController {
   final _list = RxList([]);
@@ -35,22 +35,25 @@ class Report extends StatelessWidget {
       listings.add(FrostedContainer(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(children: [
-          Expanded(
-              child: Text(
-            test,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            overflow: TextOverflow.fade,
-            softWrap: false,
-          )),
-          TextStatus(testStatus)
+        Stack(children: [
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [TextLabel("Testcases", mon2["testcases"].toString())]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(
+              test,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
+            TextStatus(testStatus)
+          ])
         ]),
         Container(
           height: 200,
           margin: EdgeInsets.symmetric(vertical: 4),
           child: ReportChart(data: mon2['gfx']),
         ),
-        Text("Testcases: " + mon2["testcases"].toString()),
         Container(
             child: Column(children: [
           for (var asserts in mon2["asserts"])
@@ -81,8 +84,8 @@ class AssertContainer extends StatelessWidget {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(assertData["assert"]),
-        Text("Expected: " + assertData["expected"]),
-        Text("Fails:" + assertData["count"].toString()),
+        TextLabel("Expected", assertData["expected"]),
+        TextLabel("Fails", assertData["count"].toString()),
         TextStatus(assertData["status"])
       ]),
       for (var data in assertData["data"]) ExpandData(data: data)

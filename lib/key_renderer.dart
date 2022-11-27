@@ -19,7 +19,10 @@ class KeyRenderer extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('$key: '),
+            Text(
+              '$key: ',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             Expanded(
                 child: Text(
               json.encode(objList[key]),
