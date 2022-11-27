@@ -3,8 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class KeyRenderer extends StatelessWidget {
-  const KeyRenderer({super.key, required this.objList});
+  const KeyRenderer(
+      {super.key,
+      required this.objList,
+      this.maxLines = 1,
+      this.softWrap = false});
   final Map<String, dynamic> objList;
+  final int? maxLines;
+  final bool softWrap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +24,8 @@ class KeyRenderer extends StatelessWidget {
                 child: Text(
               json.encode(objList[key]),
               overflow: TextOverflow.fade,
-              maxLines: 1,
-              softWrap: false,
+              maxLines: maxLines,
+              softWrap: softWrap,
             ))
           ],
         )

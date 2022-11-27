@@ -36,7 +36,7 @@ class Reports extends StatelessWidget {
           hoverEffect: true,
           onTap: () => Get.to(() => SplitView(
               content: Report(uuid: report["UUID"]),
-              hue: 358,
+              hue: 240,
               command: "satori-cli report ${report["UUID"]}")),
           cursor: SystemMouseCursors.click,
           child: Column(

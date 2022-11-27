@@ -14,7 +14,9 @@ class FrostedContainer extends StatefulWidget {
       this.borderWidth = 2.0,
       this.cursor = MouseCursor.defer,
       this.hoverEffect = false,
-      this.onTap});
+      this.onTap,
+      this.width,
+      this.height});
   final Widget child;
   final double blur;
   final double radius;
@@ -26,6 +28,8 @@ class FrostedContainer extends StatefulWidget {
   final MouseCursor cursor;
   final bool hoverEffect;
   final void Function()? onTap;
+  final double? width;
+  final double? height;
   @override
   State<FrostedContainer> createState() => _FrostedContainer();
 }
@@ -48,6 +52,8 @@ class _FrostedContainer extends State<FrostedContainer> {
         child: GestureDetector(
             onTap: widget.onTap,
             child: Container(
+                width: widget.width,
+                height: widget.height,
                 color: Colors.transparent,
                 child: Stack(
                   children: [

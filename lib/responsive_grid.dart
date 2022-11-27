@@ -5,9 +5,14 @@ import 'dart:math' as math;
 import 'config_controller.dart';
 
 class ResponsiveGrid extends StatelessWidget {
-  const ResponsiveGrid({super.key, required this.elements});
+  const ResponsiveGrid(
+      {super.key,
+      required this.elements,
+      this.widthExpected = 480,
+      this.heightExpected = 220});
   final List<Widget> elements;
-
+  final int widthExpected;
+  final int heightExpected;
   @override
   Widget build(BuildContext context) {
     final ConfigController c = Get.find();
@@ -19,10 +24,10 @@ class ResponsiveGrid extends StatelessWidget {
           color: Colors.white,
         ));
       default:
-        var columns =
-            math.max((MediaQuery.of(context).size.width ~/ 480).toInt(), 1);
+        var columns = math.max(
+            (MediaQuery.of(context).size.width ~/ widthExpected).toInt(), 1);
         var widthColumns = MediaQuery.of(context).size.width / columns;
-        var aspectRatio = widthColumns / 220;
+        var aspectRatio = widthColumns / heightExpected;
         return GridView.count(
             crossAxisCount: columns,
             childAspectRatio: aspectRatio,
