@@ -67,7 +67,7 @@ class Report extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReportController m = Get.put(ReportController());
-    getFromApi("report/info/$uuid", m, forceReload: true);
+    getFromApi("report/output?id=$uuid", m, forceReload: true);
     return Obx(() => ListView(
           shrinkWrap: true,
           children: _getListings(),
