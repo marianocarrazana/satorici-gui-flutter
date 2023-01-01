@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:satori_app/grid_renderer.dart';
@@ -47,7 +49,7 @@ class Repos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReposController m = Get.put(ReposController());
-    getFromApi('ci', m);
+    getFromApi('repo', m);
     return Obx(() => ResponsiveGrid(
           elements: _getListings(m),
         ));

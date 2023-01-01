@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hsluv/hsluvcolor.dart';
@@ -104,17 +106,19 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double colorSpread = 30;
+    double saturation = 96;
+    double lightness = 70;
     return Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              transform: GradientRotation(0.78),
-              begin: Alignment.topCenter,
-              end: Alignment.center,
-              tileMode: TileMode.repeated,
-              colors: <Color>[
-                HSLuvColor.fromHSL(hue, 100, 70).toColor(),
-                HSLuvColor.fromHSL(hue, 95, 45).toColor(),
-              ]),
+          gradient:
+              LinearGradient(transform: GradientRotation(0.78), colors: <Color>[
+            HSLuvColor.fromHSL(hue, saturation, lightness).toColor(),
+            HSLuvColor.fromHSL((hue + colorSpread) % 360, saturation, lightness)
+                .toColor(),
+            HSLuvColor.fromHSL((hue - colorSpread) % 360, saturation, lightness)
+                .toColor(),
+          ]),
         ),
         child: child);
   }

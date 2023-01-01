@@ -16,7 +16,7 @@ class Commits extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CommitsController m = Get.put(CommitsController());
-    getFromApi('report/info?repo=all', m);
+    getFromApi('repo/commits', m);
     return Obx(() => GridRenderer(
           elements: m.list,
         ));

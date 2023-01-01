@@ -104,7 +104,7 @@ class Reports extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReportsController m = Get.put(ReportsController());
-    getFromApi('report/info?repo=all', m);
+    getFromApi('report', m);
     return Obx(() => ResponsiveGrid(
           elements: _getListings(),
         ));

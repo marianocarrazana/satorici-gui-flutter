@@ -12,9 +12,9 @@ getFromApi(url, m, {bool forceReload = false}) {
   String token = c.token;
   Map<String, String> requestHeaders = {
     'Accept': 'application/json',
-    'Authorization': 'token $token'
+    'Authorization': 'Bearer $token'
   };
-  String apiHost = 'https://nuvyp2kffa.execute-api.us-east-2.amazonaws.com';
+  String apiHost = 'https://api.satori-ci.com';
   if (m.list.isEmpty || forceReload) {
     c.updateStatus(0);
     log('$apiHost/$url');
@@ -22,7 +22,15 @@ getFromApi(url, m, {bool forceReload = false}) {
       log(response.statusCode.toString());
       if (response.isOk) {
         c.updateStatus(1);
-        m.updateList(response.body);
+        log((response.body is Map<String, dynamic>).toString());
+        if (response.body is Map<String, dynamic>) {
+          m.updateList(response.body["list"]);
+        } else if (response.body is List) {
+          m.updateList(response.body);
+        } else {
+          List l = [response.body];
+          m.updateList(l);
+        }
       } else {
         c.updateStatus(3);
         log("error");

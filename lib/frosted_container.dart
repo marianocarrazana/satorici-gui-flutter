@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class FrostedContainer extends StatefulWidget {
@@ -55,54 +54,30 @@ class _FrostedContainer extends State<FrostedContainer> {
                 width: widget.width,
                 height: widget.height,
                 color: Colors.transparent,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          margin: EdgeInsets.all(widget.margin),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: widget.borderWidth,
-                                  color: Colors.transparent),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(widget.radius)),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Color.fromARGB(100, 11, 23, 33),
-                                    blurStyle: BlurStyle.outer,
-                                    blurRadius: 5),
-                              ]),
-                        )),
-                    Container(
-                        margin: EdgeInsets.all(widget.margin),
-                        child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                                sigmaX: widget.blur, sigmaY: widget.blur),
-                            child: AnimatedContainer(
-                              clipBehavior: Clip.hardEdge,
-                              padding: EdgeInsets.all(widget.padding),
-                              duration: Duration(milliseconds: 300),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: widget.borderWidth,
-                                    color: widget.borderColor ??
-                                        Color.fromARGB(100, 255, 255, 255)),
-                                color: Colors.white.withOpacity(
-                                    _isHover ? .75 : widget.opacity),
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(widget.radius)),
-                              ),
-                              child: widget.child,
-                            ),
-                          ),
-                        ))
-                  ],
+                child: Container(
+                  margin: EdgeInsets.all(widget.margin),
+                  child: AnimatedContainer(
+                    clipBehavior: Clip.hardEdge,
+                    padding: EdgeInsets.all(widget.padding),
+                    duration: Duration(milliseconds: 300),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: widget.borderWidth,
+                          color: widget.borderColor ??
+                              Color.fromARGB(50, 255, 255, 255)),
+                      color: Colors.white
+                          .withOpacity(_isHover ? .75 : widget.opacity),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(widget.radius)),
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color.fromARGB(100, 11, 23, 33),
+                            blurStyle: BlurStyle.outer,
+                            blurRadius: 5),
+                      ],
+                    ),
+                    child: widget.child,
+                  ),
                 ))));
   }
 }
