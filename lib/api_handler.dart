@@ -26,8 +26,8 @@ getFromApi(url, m, {bool forceReload = false}) {
       log(response.statusCode.toString());
       if (response.isOk) {
         c.updateStatus(1);
-        log("Body:");
-        log(response.body.toString());
+        // log("Body:");
+        // log(response.body.toString());
         if (response.body is Map<String, dynamic>) {
           if (response.body.containsKey("list"))
             m.updateList(response.body["list"]);

@@ -22,7 +22,9 @@ class Report extends StatelessWidget {
   List<Widget> _getListings() {
     final ReportController m = Get.put(ReportController());
     var listings = <Widget>[];
-    for (var mon in m.list) {
+    if (m.list.length == 0) return listings;
+    List json_data = m.list[0]["json"];
+    for (var mon in json_data) {
       var mon2 = Map<String, dynamic>.from(mon);
       String test = mon2['test'] ?? "test";
       String testStatus = (mon2['test_status'] ?? mon2['status']) +
@@ -67,7 +69,7 @@ class Report extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReportController m = Get.put(ReportController());
-    getFromApi("report/output?id=$uuid", m, forceReload: true);
+    getFromApi("report?id=$uuid", m, forceReload: true);
     return Obx(() => ListView(
           shrinkWrap: true,
           children: _getListings(),
