@@ -9,7 +9,7 @@ getFromApi(url, m, {bool forceReload = false}) {
   final ConfigController c = Get.find();
   final getConnect = GetConnect(
       timeout: Duration(seconds: 120),
-      allowAutoSignedCert: true,
+      allowAutoSignedCert: false,
       sendUserAgent: true,
       userAgent: "satori-gui-flutter");
   getConnect.timeout = const Duration(minutes: 1);
