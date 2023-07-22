@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:satori_app/frosted_container.dart';
 
-import 'config_controller.dart';
 
 class AppMenu extends StatelessWidget {
   final List _pageList = [
@@ -13,6 +12,8 @@ class AppMenu extends StatelessWidget {
     {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard},
     {'title': 'Monitor', 'route': '/monitor', 'icon': Icons.av_timer},
   ];
+
+  const AppMenu({super.key});
   @override
   Widget build(BuildContext context) {
     return FrostedContainer(

@@ -92,7 +92,7 @@ class Reports extends StatelessWidget {
                 )),
                 Text(
                   mon['Date'],
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                  style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                 )
               ])
             ],

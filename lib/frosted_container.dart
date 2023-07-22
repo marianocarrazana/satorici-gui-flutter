@@ -59,12 +59,12 @@ class _FrostedContainer extends State<FrostedContainer> {
                   child: AnimatedContainer(
                     clipBehavior: Clip.hardEdge,
                     padding: EdgeInsets.all(widget.padding),
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
                       border: Border.all(
                           width: widget.borderWidth,
                           color: widget.borderColor ??
-                              Color.fromARGB(50, 255, 255, 255)),
+                              const Color.fromARGB(50, 255, 255, 255)),
                       color: Colors.white
                           .withOpacity(_isHover ? .75 : widget.opacity),
                       borderRadius:

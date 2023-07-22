@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:fl_chart/fl_chart.dart';
 
@@ -25,8 +24,8 @@ class ReportChart extends StatelessWidget {
       passList.add(RadarEntry(value: (e[1] + e[2]).toDouble()));
       titles.add(e[0]);
     }
-    HSLuvColor green = HSLuvColor.fromHSL(120, 100, 65);
-    HSLuvColor red = HSLuvColor.fromHSL(0, 100, 65);
+    HSLuvColor green = const HSLuvColor.fromHSL(120, 100, 65);
+    HSLuvColor red = const HSLuvColor.fromHSL(0, 100, 65);
     dataSets.add(RadarDataSet(
         dataEntries: passList,
         fillColor: green.toColor().withAlpha(200),
@@ -36,11 +35,11 @@ class ReportChart extends StatelessWidget {
         fillColor: red.toColor().withAlpha(250),
         borderColor: red.addLightness(10).toColor()));
     return RadarChart(RadarChartData(
-        tickBorderData: BorderSide(color: Colors.white, width: 2.0),
-        ticksTextStyle: TextStyle(color: Colors.transparent),
+        tickBorderData: const BorderSide(color: Colors.white, width: 2.0),
+        ticksTextStyle: const TextStyle(color: Colors.transparent),
         radarShape: RadarShape.circle,
         dataSets: dataSets,
-        titleTextStyle: TextStyle(fontSize: 8.0),
+        titleTextStyle: const TextStyle(fontSize: 8.0),
         getTitle: (index, angle) {
           return RadarChartTitle(
             text: titles[index],

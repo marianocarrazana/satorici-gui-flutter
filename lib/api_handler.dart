@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:get/get.dart';
@@ -8,7 +7,7 @@ import 'config_controller.dart';
 getFromApi(url, m, {bool forceReload = false}) {
   final ConfigController c = Get.find();
   final getConnect = GetConnect(
-      timeout: Duration(seconds: 120),
+      timeout: const Duration(seconds: 120),
       allowAutoSignedCert: false,
       sendUserAgent: true,
       userAgent: "satori-gui-flutter");
@@ -29,10 +28,11 @@ getFromApi(url, m, {bool forceReload = false}) {
         // log("Body:");
         // log(response.body.toString());
         if (response.body is Map<String, dynamic>) {
-          if (response.body.containsKey("list"))
+          if (response.body.containsKey("list")) {
             m.updateList(response.body["list"]);
-          else
+          } else {
             m.updateList([response.body]);
+          }
         } else if (response.body is List) {
           m.updateList(response.body);
         } else {

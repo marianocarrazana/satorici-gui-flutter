@@ -21,7 +21,7 @@ class KeyRenderer extends StatelessWidget {
           children: [
             Text(
               '$key: ',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Expanded(
                 child: Text(

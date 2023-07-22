@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +33,7 @@ class SplitView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: menuWidth,
-                    child: AppMenu(),
+                    child: const AppMenu(),
                   ),
                   Expanded(
                     child: Column(
@@ -90,7 +89,7 @@ class SplitView extends StatelessWidget {
           width: menuWidth,
           child: Drawer(
             backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
-            child: AppMenu(),
+            child: const AppMenu(),
           ),
         ),
       );
@@ -112,7 +111,7 @@ class GradientContainer extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           gradient:
-              LinearGradient(transform: GradientRotation(0.78), colors: <Color>[
+              LinearGradient(transform: const GradientRotation(0.78), colors: <Color>[
             HSLuvColor.fromHSL(hue, saturation, lightness).toColor(),
             HSLuvColor.fromHSL((hue + colorSpread) % 360, saturation, lightness)
                 .toColor(),

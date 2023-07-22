@@ -22,14 +22,14 @@ class Report extends StatelessWidget {
   List<Widget> _getListings() {
     final ReportController m = Get.put(ReportController());
     var listings = <Widget>[];
-    if (m.list.length == 0) return listings;
-    List json_data = m.list[0]["json"];
-    for (var mon in json_data) {
+    if (m.list.isEmpty) return listings;
+    List jsonData = m.list[0]["json"];
+    for (var mon in jsonData) {
       var mon2 = Map<String, dynamic>.from(mon);
       String test = mon2['test'] ?? "test";
       String testStatus = (mon2['test_status'] ?? mon2['status']) +
           (mon2['total_fails'] > 0
-              ? ('(' + mon2['total_fails'].toString() + ')')
+              ? ('(${mon2['total_fails']})')
               : "");
       List toRemove = ['test', 'test_status', 'status', 'total_fails'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
@@ -53,7 +53,7 @@ class Report extends StatelessWidget {
         ]),
         Container(
           height: 200,
-          margin: EdgeInsets.symmetric(vertical: 4),
+          margin: const EdgeInsets.symmetric(vertical: 4),
           child: ReportChart(data: mon2['gfx']),
         ),
         Container(
@@ -107,7 +107,7 @@ class _ExpandData extends State<ExpandData> {
   @override
   Widget build(BuildContext context) {
     return ExpandablePanel(
-        header: Padding(
+        header: const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
               "Data",

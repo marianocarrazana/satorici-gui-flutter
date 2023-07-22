@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:satori_app/grid_renderer.dart';
 import 'package:satori_app/text_widgets.dart';
 
 import 'api_handler.dart';
@@ -28,12 +26,12 @@ class Repos extends StatelessWidget {
       listings.add(FrostedContainer(
           child: Column(children: [
         Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 14),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
             child: Row(children: [
               Expanded(
                   child: Text(
                 mon["Repo"],
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               )),
               TextStatus(mon["Result"])
             ])),
