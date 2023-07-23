@@ -16,7 +16,7 @@ class Monitor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MonitorController m = Get.put(MonitorController());
-    getFromApi('monitor', m);
+    getFromApi('monitors', m);
     return Obx(() => GridRenderer(
           elements: m.list,
         ));

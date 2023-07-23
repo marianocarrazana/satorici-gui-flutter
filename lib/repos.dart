@@ -30,10 +30,10 @@ class Repos extends StatelessWidget {
             child: Row(children: [
               Expanded(
                   child: Text(
-                mon["Repo"],
+                mon["repo"],
                 style: const TextStyle(fontWeight: FontWeight.bold),
               )),
-              TextStatus(mon["Result"])
+              TextStatus(mon["result"])
             ])),
         Expanded(
             child: KeyRenderer(
@@ -47,7 +47,7 @@ class Repos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReposController m = Get.put(ReposController());
-    getFromApi('repo', m);
+    getFromApi('repos', m);
     return Obx(() => ResponsiveGrid(
           elements: _getListings(m),
         ));

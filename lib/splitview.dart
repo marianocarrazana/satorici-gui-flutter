@@ -33,7 +33,7 @@ class SplitView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: menuWidth,
-                    child: const AppMenu(),
+                    child:  AppMenu(),
                   ),
                   Expanded(
                     child: Column(
@@ -89,7 +89,7 @@ class SplitView extends StatelessWidget {
           width: menuWidth,
           child: Drawer(
             backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
-            child: const AppMenu(),
+            child:  AppMenu(),
           ),
         ),
       );

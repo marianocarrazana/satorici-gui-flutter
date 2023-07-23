@@ -13,7 +13,6 @@ class AppMenu extends StatelessWidget {
     {'title': 'Monitor', 'route': '/monitor', 'icon': Icons.av_timer},
   ];
 
-  const AppMenu({super.key});
   @override
   Widget build(BuildContext context) {
     return FrostedContainer(

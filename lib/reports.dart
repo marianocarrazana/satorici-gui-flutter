@@ -24,20 +24,20 @@ class Reports extends StatelessWidget {
     final ReportsController m = Get.put(ReportsController());
     var listings = <Widget>[];
     for (var mon in m.list) {
-      var report = mon["Report"];
+      var report = mon["report"];
       var testCases = <Widget>[];
       log(jsonEncode(mon));
-      if (report["Testcases"] is List) {
-        for (var test in report["Testcases"]) {
+      if (report["testcases"] is List) {
+        for (var test in report["testcases"]) {
           testCases.add(TextStatus(test));
         }
       }
       listings.add(FrostedContainer(
           hoverEffect: true,
           onTap: () => Get.to(() => SplitView(
-              content: Report(uuid: report["UUID"]),
+              content: Report(uuid: report["id"]),
               hue: 240,
-              command: "satori-cli report ${report["UUID"]}")),
+              command: "satori-cli report ${report["id"]}")),
           cursor: SystemMouseCursors.click,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,20 +45,20 @@ class Reports extends StatelessWidget {
               Row(children: [
                 Expanded(
                     child: Text(
-                  report["UUID"],
+                  report["id"],
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 12),
                   overflow: TextOverflow.fade,
                   softWrap: false,
                 )),
-                TextStatus(report["Result"] ?? "Unknown")
+                TextStatus(report["result"] ?? "Unknown")
               ]),
               Expanded(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                     ...testCases,
-                    if (report['Errors'] != null)
+                    if (report['errors'] != null)
                       Expanded(
                           child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -72,26 +72,26 @@ class Reports extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Errors: ",
+                                      "errors: ",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     Expanded(
-                                        child: Text(report['Errors'],
+                                        child: Text(report['errors'],
                                             overflow: TextOverflow.fade,
                                             style: const TextStyle(
                                                 color: Colors.white))),
                                   ])))
                   ])),
               Row(children: [
-                Expanded(child: Text(report["Time required"] ?? "-")),
+                Expanded(child: Text(report["time required"] ?? "-")),
                 Expanded(
                     child: Text(
-                  report["User"],
+                  report["user"]??"",
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                 )),
                 Text(
-                  mon['Date'],
+                  mon['date'],
                   style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                 )
               ])
@@ -104,7 +104,7 @@ class Reports extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ReportsController m = Get.put(ReportsController());
-    getFromApi('report', m);
+    getFromApi('reports', m);
     return Obx(() => ResponsiveGrid(
           elements: _getListings(),
         ));
