@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
-import 'config_controller.dart';
+import 'states.dart';
 
-class ResponsiveGrid extends StatelessWidget {
+class ResponsiveGrid extends ConsumerWidget {
   const ResponsiveGrid(
       {super.key,
       required this.elements,
@@ -14,10 +14,10 @@ class ResponsiveGrid extends StatelessWidget {
   final int widthExpected;
   final int heightExpected;
   @override
-  Widget build(BuildContext context) {
-    final ConfigController c = Get.find();
+  Widget build(BuildContext context, WidgetRef ref) {
     //0=loading, 1=loaded, 2=cached, 3=error
-    switch (c.status) {
+    final int _status = ref.watch(status);
+    switch (_status) {
       case 0:
         return const Center(
             child: CircularProgressIndicator(

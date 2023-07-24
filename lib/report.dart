@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/report_chart.dart';
 
 import 'frosted_container.dart';
@@ -10,30 +10,33 @@ import 'api_handler.dart';
 import 'key_renderer.dart';
 import 'text_widgets.dart';
 
-class ReportController extends GetxController {
-  final _list = RxList([]);
-  List get list => _list.value;
-  updateList(newList) => _list.value = newList;
+class ReportsList extends StateNotifier<List> {
+  List list = [];
+  ReportsList(this.ref) : super([]);
+  final Ref ref;
+  void updateList(newList) {
+    list = newList;
+  }
 }
 
-class Report extends StatelessWidget {
+final reportsList =
+    StateNotifierProvider<ReportsList, List>((ref) => ReportsList(ref));
+
+class Report extends ConsumerWidget {
   const Report({super.key, required this.uuid});
   final String uuid;
-  List<Widget> _getListings() {
-    final ReportController m = Get.put(ReportController());
+  List<Widget> _getListings(WidgetRef ref) {
     var listings = <Widget>[];
-    if (m.list.isEmpty) return listings;
-    List jsonData = m.list[0]["json"];
+    List rList = ref.read(reportsList.notifier).list;
+    if (rList.isEmpty) return listings;
+    List jsonData = rList[0]["json"];
     for (var mon in jsonData) {
       var mon2 = Map<String, dynamic>.from(mon);
       String test = mon2['test'] ?? "test";
       String testStatus = (mon2['test_status'] ?? mon2['status']) +
-          (mon2['total_fails'] > 0
-              ? ('(${mon2['total_fails']})')
-              : "");
+          (mon2['total_fails'] > 0 ? ('(${mon2['total_fails']})') : "");
       List toRemove = ['test', 'test_status', 'status', 'total_fails'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
-      log(mon.toString());
       listings.add(FrostedContainer(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -67,13 +70,12 @@ class Report extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final ReportController m = Get.put(ReportController());
-    getFromApi("reports/$uuid", m, forceReload: true);
-    return Obx(() => ListView(
-          shrinkWrap: true,
-          children: _getListings(),
-        ));
+  Widget build(BuildContext context, WidgetRef ref) {
+    getFromApi("reports/$uuid", ref.read(reportsList.notifier), ref, forceReload: true);
+    return ListView(
+      shrinkWrap: true,
+      children: _getListings(ref),
+    );
   }
 }
 

@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'config_controller.dart';
+import 'states.dart';
 import 'frosted_container.dart';
 import 'key_renderer.dart';
 
-class GridRenderer extends StatelessWidget {
+class GridRenderer extends ConsumerWidget {
   const GridRenderer({super.key, required this.elements});
   final List elements;
 
@@ -23,10 +23,10 @@ class GridRenderer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final ConfigController c = Get.find();
+  Widget build(BuildContext context, WidgetRef ref) {
     //0=loading, 1=loaded, 2=cached, 3=error
-    switch (c.status) {
+    final int _status = ref.watch(status);
+    switch (_status) {
       case 0:
         return const Center(
             child: CircularProgressIndicator(

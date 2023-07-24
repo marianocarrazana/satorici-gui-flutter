@@ -1,6 +1,7 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/text_widgets.dart';
 
 import 'api_handler.dart';
@@ -8,18 +9,23 @@ import 'frosted_container.dart';
 import 'key_renderer.dart';
 import 'responsive_grid.dart';
 
-class ReposController extends GetxController {
-  final _list = RxList([]);
-  List get list => _list.value;
-  updateList(newList) => _list.value = newList;
+class ReposList extends StateNotifier<List> {
+  ReposList(this.ref) : super([]);
+  final Ref ref;
+  void updateList(newList) {
+    state = newList;
+  }
 }
 
-class Repos extends StatelessWidget {
+final reposList =
+    StateNotifierProvider<ReposList, List>((ref) => ReposList(ref));
+
+class Repos extends ConsumerWidget {
   const Repos({super.key});
 
-  List<Widget> _getListings(m) {
+  List<Widget> _getListings(List repos) {
     var listings = <Widget>[];
-    for (var mon in m.list) {
+    for (var mon in repos) {
       var mon2 = Map<String, dynamic>.from(mon);
       List toRemove = ['Repo', 'Result'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
@@ -45,11 +51,11 @@ class Repos extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final ReposController m = Get.put(ReposController());
-    getFromApi('repos', m);
-    return Obx(() => ResponsiveGrid(
-          elements: _getListings(m),
-        ));
+  Widget build(BuildContext context, WidgetRef ref) {
+    getFromApi('repos', ref.read(reposList.notifier), ref);
+    List todos = ref.watch(reposList);
+    return ResponsiveGrid(
+      elements: _getListings(todos),
+    );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_handler.dart';
 import 'frosted_container.dart';
@@ -11,22 +11,26 @@ import 'responsive_grid.dart';
 import 'splitview.dart';
 import 'text_widgets.dart';
 
-class ReportsController extends GetxController {
-  final _list = RxList([]);
-  List get list => _list.value;
-  updateList(newList) => _list.value = newList;
+class ReportsList extends StateNotifier<List> {
+  ReportsList(this.ref) : super([]);
+  final Ref ref;
+  void updateList(newList) {
+    state = newList;
+  }
 }
 
-class Reports extends StatelessWidget {
+final reportsList =
+    StateNotifierProvider<ReportsList, List>((ref) => ReportsList(ref));
+
+class Reports extends ConsumerWidget {
   const Reports({super.key});
 
-  List<Widget> _getListings() {
-    final ReportsController m = Get.put(ReportsController());
+  List<Widget> _getListings(List reports) {
+    log(reports.toString());
     var listings = <Widget>[];
-    for (var mon in m.list) {
+    for (var mon in reports) {
       var report = mon["report"];
       var testCases = <Widget>[];
-      log(jsonEncode(mon));
       if (report["testcases"] is List) {
         for (var test in report["testcases"]) {
           testCases.add(TextStatus(test));
@@ -34,10 +38,10 @@ class Reports extends StatelessWidget {
       }
       listings.add(FrostedContainer(
           hoverEffect: true,
-          onTap: () => Get.to(() => SplitView(
-              content: Report(uuid: report["id"]),
-              hue: 240,
-              command: "satori-cli report ${report["id"]}")),
+          // onTap: () => Get.to(() => SplitView(
+          //     content: Report(uuid: report["id"]),
+          //     hue: 240,
+          //     command: "satori-cli report ${report["id"]}")),
           cursor: SystemMouseCursors.click,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,13 +90,14 @@ class Reports extends StatelessWidget {
                 Expanded(child: Text(report["time required"] ?? "-")),
                 Expanded(
                     child: Text(
-                  report["user"]??"",
+                  report["user"] ?? "",
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                 )),
                 Text(
                   mon['date'],
-                  style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w300, fontSize: 10),
                 )
               ])
             ],
@@ -102,11 +107,11 @@ class Reports extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final ReportsController m = Get.put(ReportsController());
-    getFromApi('reports', m);
-    return Obx(() => ResponsiveGrid(
-          elements: _getListings(),
-        ));
+  Widget build(BuildContext context, WidgetRef ref) {
+    getFromApi('reports', ref.read(reportsList.notifier), ref);
+    List todos = ref.watch(reportsList);
+    return ResponsiveGrid(
+      elements: _getListings(todos),
+    );
   }
 }

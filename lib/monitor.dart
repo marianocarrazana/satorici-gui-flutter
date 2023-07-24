@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_handler.dart';
 import 'grid_renderer.dart';
 
-class MonitorController extends GetxController {
-  final _list = RxList([]);
-  List get list => _list.value;
-  updateList(newList) => _list.value = newList;
+class MonitorsList extends StateNotifier<List> {
+  MonitorsList(this.ref) : super([]);
+  final Ref ref;
+  void updateList(newList) {
+    state = newList;
+  }
 }
 
-class Monitor extends StatelessWidget {
+final monitorsList =
+    StateNotifierProvider<MonitorsList, List>((ref) => MonitorsList(ref));
+
+
+class Monitor extends ConsumerWidget {
   const Monitor({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final MonitorController m = Get.put(MonitorController());
-    getFromApi('monitors', m);
-    return Obx(() => GridRenderer(
-          elements: m.list,
-        ));
+  Widget build(BuildContext context, WidgetRef ref) {
+    getFromApi('monitors', ref.read(monitorsList.notifier), ref);
+    List todos = ref.watch(monitorsList);
+    return GridRenderer(
+          elements: todos,
+        );
   }
 }

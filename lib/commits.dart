@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_handler.dart';
 import 'grid_renderer.dart';
 
-class CommitsController extends GetxController {
-  final _list = RxList([]);
-  List get list => _list.value;
-  updateList(newList) => _list.value = newList;
+class CommitsList extends StateNotifier<List> {
+  List list = [];
+  CommitsList(this.ref) : super([]);
+  final Ref ref;
+  void updateList(newList) {
+    list = newList;
+  }
 }
 
-class Commits extends StatelessWidget {
+final commitsList =
+    StateNotifierProvider<CommitsList, List>((ref) => CommitsList(ref));
+
+class Commits extends ConsumerWidget {
   const Commits({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final CommitsController m = Get.put(CommitsController());
-    getFromApi('repos/commits', m);
-    return Obx(() => GridRenderer(
-          elements: m.list,
-        ));
+  Widget build(BuildContext context, WidgetRef ref) {
+    getFromApi('repos/commits', ref.read(commitsList.notifier), ref);
+    return GridRenderer(
+          elements: ref.read(commitsList.notifier).list,
+        );
   }
 }

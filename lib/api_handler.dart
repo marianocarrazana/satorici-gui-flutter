@@ -1,52 +1,53 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:get/get.dart';
+import 'states.dart';
 
-import 'config_controller.dart';
-
-getFromApi(url, m, {bool forceReload = false}) {
-  final ConfigController c = Get.find();
-  final getConnect = GetConnect(
-      timeout: const Duration(seconds: 120),
-      allowAutoSignedCert: false,
-      sendUserAgent: true,
-      userAgent: "satori-gui-flutter");
-  getConnect.timeout = const Duration(minutes: 1);
-  String token = c.token;
-  Map<String, String> requestHeaders = {
-    'Accept': 'application/json',
-    'Authorization': 'Bearer $token'
-  };
-  String apiHost = 'https://api.satori-ci.com';
-  if (m.list.isEmpty || forceReload) {
-    c.updateStatus(0);
-    log('$apiHost/$url');
-    getConnect.get('$apiHost/$url', headers: requestHeaders).then((response) {
-      log(response.statusCode.toString());
-      if (response.isOk) {
-        c.updateStatus(1);
-        // log("Body:");
-        // log(response.body.toString());
-        if (response.body is Map<String, dynamic>) {
-          if (response.body.containsKey("list")) {
-            m.updateList(response.body["list"]);
+getFromApi(url, m, WidgetRef ref, {bool forceReload = false}) {
+  final getConnect = Client();
+  SharedPreferences.getInstance().then((prefs) {
+    String token = prefs.getString('token') ?? "";
+    Map<String, String> requestHeaders = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    String apiHost = 'https://api.satori-ci.com';
+    if (m.state.isEmpty || forceReload) {
+      ref.read(status.notifier).state = 0;
+      log('$apiHost/$url');
+      getConnect
+          .get(Uri.https('api.satori-ci.com', url), headers: requestHeaders)
+          .then((response) {
+        log(response.statusCode.toString());
+        if (response.statusCode == 200) {
+          ref.read(status.notifier).state = 1;
+          // log("Body:");
+          // log(response.body.toString());
+          dynamic body = jsonDecode(response.body);
+          if (body is Map<String, dynamic>) {
+            if (body.containsKey("list")) {
+              m.updateList(body["list"]);
+            } else {
+              m.updateList([body]);
+            }
+          } else if (body is List) {
+            m.updateList(body);
           } else {
-            m.updateList([response.body]);
+            List l = [body];
+            m.updateList(l);
           }
-        } else if (response.body is List) {
-          m.updateList(response.body);
         } else {
-          List l = [response.body];
-          m.updateList(l);
+          ref.read(status.notifier).state = 3;
+          log("error");
         }
-      } else {
-        c.updateStatus(3);
-        log("error");
-      }
-    }).catchError((e) {
-      log(e.toString());
-    });
-  } else {
-    c.updateStatus(2);
-  }
+      }).catchError((e) {
+        log(e.toString());
+      });
+    } else {
+      ref.read(status.notifier).state = 2;
+    }
+  });
 }

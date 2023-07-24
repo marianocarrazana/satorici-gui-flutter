@@ -1,10 +1,11 @@
 // app_menu.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:satori_app/frosted_container.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'frosted_container.dart';
+import 'states.dart';
 
-class AppMenu extends StatelessWidget {
+class AppMenu extends ConsumerWidget {
   final List _pageList = [
     {'title': 'Home', 'route': '/home', 'icon': Icons.home},
     {'title': 'Reports', 'route': '/reports', 'icon': Icons.featured_play_list},
@@ -14,7 +15,7 @@ class AppMenu extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FrostedContainer(
       margin: 12.0,
       child: ListView(
@@ -24,14 +25,14 @@ class AppMenu extends StatelessWidget {
             Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Get.currentRoute.toString() == page['route']
+                  color: ref.watch(currentPage) == page['route']
                       ? Colors.white.withOpacity(.6)
                       : Colors.transparent,
                 ),
                 child: PageListTile(
-                  pageData: page,
-                  onPressed: () => Get.toNamed(page['route']!),
-                )),
+                    pageData: page,
+                    onPressed: () =>
+                        Navigator.pushNamed(context, page['route']))),
         ],
       ),
     );
