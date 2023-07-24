@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'frosted_container.dart';
+import 'widgets/satori_container.dart';
 import 'states.dart';
 
 class AppMenu extends ConsumerWidget {
@@ -16,7 +16,7 @@ class AppMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FrostedContainer(
+    return SatoriContainer(
       margin: 12.0,
       child: ListView(
         children: <Widget>[

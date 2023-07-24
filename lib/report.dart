@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/report_chart.dart';
 
-import 'frosted_container.dart';
+import 'widgets/satori_container.dart';
 import 'api_handler.dart';
 import 'key_renderer.dart';
 import 'text_widgets.dart';
@@ -37,7 +37,7 @@ class Report extends ConsumerWidget {
           (mon2['total_fails'] > 0 ? ('(${mon2['total_fails']})') : "");
       List toRemove = ['test', 'test_status', 'status', 'total_fails'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
-      listings.add(FrostedContainer(
+      listings.add(SatoriContainer(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Stack(children: [
@@ -71,7 +71,8 @@ class Report extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    getFromApi("reports/$uuid", ref.read(reportsList.notifier), ref, forceReload: true);
+    getFromApi("reports/$uuid", ref.read(reportsList.notifier), ref,
+        forceReload: true);
     return ListView(
       shrinkWrap: true,
       children: _getListings(ref),

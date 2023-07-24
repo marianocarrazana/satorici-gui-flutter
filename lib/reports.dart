@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_handler.dart';
-import 'frosted_container.dart';
+import 'widgets/satori_container.dart';
 import 'report.dart';
 import 'responsive_grid.dart';
 import 'splitview.dart';
@@ -36,7 +36,7 @@ class Reports extends ConsumerWidget {
           testCases.add(TextStatus(test));
         }
       }
-      listings.add(FrostedContainer(
+      listings.add(SatoriContainer(
           hoverEffect: true,
           // onTap: () => Get.to(() => SplitView(
           //     content: Report(uuid: report["id"]),

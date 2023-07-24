@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/text_widgets.dart';
 
 import 'api_handler.dart';
-import 'frosted_container.dart';
+import 'widgets/satori_container.dart';
 import 'key_renderer.dart';
 import 'responsive_grid.dart';
 
@@ -29,7 +29,7 @@ class Repos extends ConsumerWidget {
       var mon2 = Map<String, dynamic>.from(mon);
       List toRemove = ['Repo', 'Result'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
-      listings.add(FrostedContainer(
+      listings.add(SatoriContainer(
           child: Column(children: [
         Container(
             margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),

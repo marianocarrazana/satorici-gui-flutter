@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'commits.dart';
 import 'home.dart';
@@ -22,7 +23,11 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
         title: 'SAPP',
-        theme: ThemeData.light(),
+        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          fontFamily: GoogleFonts.getFont('PT Mono').fontFamily,
+        ),
         initialRoute: "/home",
         routes: {
           '/home': (context) => const SplitView(

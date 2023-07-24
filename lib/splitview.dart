@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hsluv/hsluvcolor.dart';
@@ -33,7 +32,7 @@ class SplitView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: menuWidth,
-                    child:  AppMenu(),
+                    child: AppMenu(),
                   ),
                   Expanded(
                     child: Column(
@@ -89,7 +88,7 @@ class SplitView extends StatelessWidget {
           width: menuWidth,
           child: Drawer(
             backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
-            child:  AppMenu(),
+            child: AppMenu(),
           ),
         ),
       );
@@ -105,19 +104,22 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double colorSpread = 30;
-    double saturation = 96;
-    double lightness = 70;
+    double colorSpread = 24;
+    double saturation = 66;
+    double lightness = 18;
     return Container(
         decoration: BoxDecoration(
-          gradient:
-              LinearGradient(transform: const GradientRotation(0.78), colors: <Color>[
-            HSLuvColor.fromHSL(hue, saturation, lightness).toColor(),
-            HSLuvColor.fromHSL((hue + colorSpread) % 360, saturation, lightness)
-                .toColor(),
-            HSLuvColor.fromHSL((hue - colorSpread) % 360, saturation, lightness)
-                .toColor(),
-          ]),
+          gradient: LinearGradient(
+              transform: const GradientRotation(0.78),
+              colors: <Color>[
+                HSLuvColor.fromHSL(hue, saturation, lightness).toColor(),
+                HSLuvColor.fromHSL(
+                        (hue + colorSpread) % 360, saturation, lightness)
+                    .toColor(),
+                HSLuvColor.fromHSL(
+                        (hue - colorSpread) % 360, saturation, lightness)
+                    .toColor(),
+              ]),
         ),
         child: child);
   }
