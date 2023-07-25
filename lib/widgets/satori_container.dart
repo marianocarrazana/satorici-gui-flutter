@@ -1,20 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class SatoriContainer extends StatefulWidget {
-  const SatoriContainer(
-      {super.key,
-      required this.child,
-      this.radius = 6.0,
-      this.margin = 8.0,
-      this.padding = 8.0,
-      this.opacity = 0.12,
-      this.borderColor,
-      this.borderWidth = 1.0,
-      this.cursor = MouseCursor.defer,
-      this.hoverEffect = false,
-      this.onTap,
-      this.width,
-      this.height});
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hsluv/hsluvcolor.dart';
+
+import '../states.dart';
+
+class SatoriContainer extends ConsumerStatefulWidget {
+  const SatoriContainer({
+    super.key,
+    required this.child,
+    this.radius = 6.0,
+    this.margin = 8.0,
+    this.padding = 8.0,
+    this.opacity = 0.12,
+    this.borderColor,
+    this.borderWidth = 1.0,
+    this.cursor = MouseCursor.defer,
+    this.hoverEffect = false,
+    this.onTap,
+    this.width,
+    this.height,
+  });
   final Widget child;
   final double radius;
   final double margin;
@@ -28,10 +35,10 @@ class SatoriContainer extends StatefulWidget {
   final double? width;
   final double? height;
   @override
-  State<SatoriContainer> createState() => _FrostedContainer();
+  ConsumerState<SatoriContainer> createState() => _FrostedContainer();
 }
 
-class _FrostedContainer extends State<SatoriContainer> {
+class _FrostedContainer extends ConsumerState<SatoriContainer> {
   bool _isHover = false;
 
   void updateIsHover(newState) {
@@ -42,6 +49,12 @@ class _FrostedContainer extends State<SatoriContainer> {
 
   @override
   Widget build(BuildContext context) {
+    double saturation = 66;
+    double lightness = 20;
+    Color background =
+        HSLuvColor.fromHSL(ref.read(pageHue), saturation, lightness).toColor();
+    Color backgroundHover =
+        HSLuvColor.fromColor(background).withLightness(25).toColor();
     return MouseRegion(
         cursor: widget.cursor,
         onEnter: widget.hoverEffect ? (event) => updateIsHover(true) : null,
@@ -60,9 +73,7 @@ class _FrostedContainer extends State<SatoriContainer> {
                       width: widget.borderWidth,
                       color: widget.borderColor ??
                           const Color.fromARGB(100, 255, 255, 255)),
-                  color: _isHover
-                      ? Color.fromARGB(255, 56, 56, 56)
-                      : Color.fromARGB(255, 44, 44, 44),
+                  color: _isHover ? backgroundHover : background,
                   borderRadius:
                       BorderRadius.all(Radius.circular(widget.radius)),
                   boxShadow: const [

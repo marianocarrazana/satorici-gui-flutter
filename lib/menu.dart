@@ -1,4 +1,6 @@
 // app_menu.dart
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,18 +8,35 @@ import 'widgets/satori_container.dart';
 import 'states.dart';
 
 class AppMenu extends ConsumerWidget {
+  AppMenu({super.key, this.hue});
+  final double? hue;
   final List _pageList = [
-    {'title': 'Home', 'route': '/home', 'icon': Icons.home},
-    {'title': 'Reports', 'route': '/reports', 'icon': Icons.featured_play_list},
-    {'title': 'Commits', 'route': '/commits', 'icon': Icons.commit},
-    {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard},
-    {'title': 'Monitor', 'route': '/monitor', 'icon': Icons.av_timer},
+    {'title': 'Home', 'route': '/home', 'icon': Icons.home, "hue": 138.0},
+    {
+      'title': 'Reports',
+      'route': '/reports',
+      'icon': Icons.featured_play_list,
+      "hue": 238.0
+    },
+    {
+      'title': 'Commits',
+      'route': '/commits',
+      'icon': Icons.commit,
+      "hue": 298.0
+    },
+    {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard, "hue": 38.0},
+    {
+      'title': 'Monitor',
+      'route': '/monitor',
+      'icon': Icons.av_timer,
+      "hue": 98.0
+    },
   ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SatoriContainer(
-      margin: 12.0,
+      margin: 12,
       child: ListView(
         children: <Widget>[
           // iterate through the keys to get the page names
@@ -26,13 +45,16 @@ class AppMenu extends ConsumerWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: ref.watch(currentPage) == page['route']
-                      ? Colors.white.withOpacity(.6)
+                      ? Colors.white.withOpacity(.16)
                       : Colors.transparent,
                 ),
                 child: PageListTile(
                     pageData: page,
-                    onPressed: () =>
-                        Navigator.pushNamed(context, page['route']))),
+                    onPressed: () {
+                      ref.read(currentPage.notifier).state = page['route'];
+                      ref.read(pageHue.notifier).state = page['hue'];
+                      Navigator.pushNamed(context, page['route']);
+                    })),
         ],
       ),
     );

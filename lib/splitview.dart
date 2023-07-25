@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hsluv/hsluvcolor.dart';
+import 'package:satori_app/states.dart';
 
 import 'menu.dart';
 
@@ -88,7 +90,9 @@ class SplitView extends StatelessWidget {
           width: menuWidth,
           child: Drawer(
             backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
-            child: AppMenu(),
+            child: AppMenu(
+              hue: hue,
+            ),
           ),
         ),
       );
@@ -96,29 +100,28 @@ class SplitView extends StatelessWidget {
   }
 }
 
-class GradientContainer extends StatelessWidget {
+class GradientContainer extends ConsumerWidget {
   final double hue;
   final Widget child;
 
   const GradientContainer({super.key, required this.hue, required this.child});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     double colorSpread = 24;
-    double saturation = 66;
-    double lightness = 18;
+    double saturation = 55;
+    double lightness = 16;
+    double hue1 = ref.read(pageHue);
+    double hue2 = (ref.read(pageHue) + colorSpread) % 360;
+    double hue3 = (ref.read(pageHue) - colorSpread) % 360;
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
               transform: const GradientRotation(0.78),
               colors: <Color>[
-                HSLuvColor.fromHSL(hue, saturation, lightness).toColor(),
-                HSLuvColor.fromHSL(
-                        (hue + colorSpread) % 360, saturation, lightness)
-                    .toColor(),
-                HSLuvColor.fromHSL(
-                        (hue - colorSpread) % 360, saturation, lightness)
-                    .toColor(),
+                HSLuvColor.fromHSL(hue1, saturation, lightness).toColor(),
+                HSLuvColor.fromHSL(hue2, saturation, lightness).toColor(),
+                HSLuvColor.fromHSL(hue3, saturation, lightness).toColor(),
               ]),
         ),
         child: child);
