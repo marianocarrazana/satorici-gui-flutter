@@ -7,24 +7,17 @@ import 'package:satori_app/states.dart';
 import 'menu.dart';
 
 class SplitView extends ConsumerWidget {
-  const SplitView(
-      {Key? key,
-      required this.content,
-      // these values are now configurable with sensible default values
-      this.breakpoint = 600,
-      this.menuWidth = 240,
-      required this.command})
+  const SplitView({Key? key, required this.content, required this.command})
       : super(key: key);
   final Widget content;
-  final double breakpoint;
-  final double menuWidth;
   final String command;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
+    const double menuWidth = 240;
     double hue = ref.read(pageHue);
-    if (screenWidth >= breakpoint) {
+    if (screenWidth >= 600) {
       // desktop
       return Scaffold(
           body: GradientContainer(
@@ -79,15 +72,15 @@ class SplitView extends ConsumerWidget {
     } else {
       // mobile
       return Scaffold(
-        body: GradientContainer( child: content),
+        body: GradientContainer(child: content),
         appBar: AppBar(
           title: const Text('Satori CI'),
-          backgroundColor: HSLuvColor.fromHSL(hue , 100, 70).toColor(),
+          backgroundColor: HSLuvColor.fromHSL(hue, 100, 70).toColor(),
         ),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(
-            backgroundColor: HSLuvColor.fromHSL(hue , 100, 70).toColor(),
+            backgroundColor: HSLuvColor.fromHSL(hue, 100, 70).toColor(),
             child: AppMenu(
               hue: hue,
             ),
@@ -101,7 +94,7 @@ class SplitView extends ConsumerWidget {
 class GradientContainer extends ConsumerWidget {
   final Widget child;
 
-  const GradientContainer({super.key,required this.child});
+  const GradientContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context, ref) {

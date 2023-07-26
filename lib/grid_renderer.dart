@@ -25,8 +25,8 @@ class GridRenderer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //0=loading, 1=loaded, 2=cached, 3=error
-    final int _status = ref.watch(status);
-    switch (_status) {
+    final int statusref = ref.watch(status);
+    switch (statusref) {
       case 0:
         return const Center(
             child: CircularProgressIndicator(
