@@ -1,6 +1,3 @@
-// app_menu.dart
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +8,7 @@ class AppMenu extends ConsumerWidget {
   AppMenu({super.key, this.hue});
   final double? hue;
   final List _pageList = [
-    {'title': 'Home', 'route': '/home', 'icon': Icons.home, "hue": 138.0},
+    {'title': 'Home', 'route': '/', 'icon': Icons.home, "hue": 138.0},
     {
       'title': 'Reports',
       'route': '/reports',
@@ -27,7 +24,7 @@ class AppMenu extends ConsumerWidget {
     {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard, "hue": 38.0},
     {
       'title': 'Monitor',
-      'route': '/monitor',
+      'route': '/monitors',
       'icon': Icons.av_timer,
       "hue": 98.0
     },
