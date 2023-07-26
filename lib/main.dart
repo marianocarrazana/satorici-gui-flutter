@@ -30,19 +30,16 @@ class MyApp extends ConsumerWidget {
         ),
         initialRoute: "/home",
         routes: {
-          '/home': (context) => const SplitView(
-                content: Home(),
-                hue: 138,
-                command: "satori-cli",
-              ),
-          '/reports': (context) => const SplitView(
-              content: Reports(), hue: 238, command: "satori-cli report"),
+          '/home': (context) =>
+              const SplitView(content: Home(), command: "satori-cli"),
+          '/reports': (context) =>
+              const SplitView(content: Reports(), command: "satori-cli report"),
           '/commits': (context) => const SplitView(
-              content: Commits(), hue: 298, command: "satori-cli repo commits"),
-          '/repos': (context) => const SplitView(
-              content: Repos(), hue: 38, command: "satori-cli repo"),
+              content: Commits(), command: "satori-cli repo commits"),
+          '/repos': (context) =>
+              const SplitView(content: Repos(), command: "satori-cli repo"),
           '/monitor': (context) => const SplitView(
-              content: Monitor(), hue: 98, command: "satori-cli monitor"),
+              content: Monitor(), command: "satori-cli monitor"),
         });
   }
 }

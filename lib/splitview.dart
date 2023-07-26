@@ -6,30 +6,28 @@ import 'package:satori_app/states.dart';
 
 import 'menu.dart';
 
-class SplitView extends StatelessWidget {
+class SplitView extends ConsumerWidget {
   const SplitView(
       {Key? key,
       required this.content,
       // these values are now configurable with sensible default values
       this.breakpoint = 600,
       this.menuWidth = 240,
-      this.hue,
       required this.command})
       : super(key: key);
   final Widget content;
   final double breakpoint;
   final double menuWidth;
-  final double? hue;
   final String command;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
+    double hue = ref.read(pageHue);
     if (screenWidth >= breakpoint) {
       // desktop
       return Scaffold(
           body: GradientContainer(
-              hue: hue ?? 47,
               child: Row(
                 children: [
                   SizedBox(
@@ -81,15 +79,15 @@ class SplitView extends StatelessWidget {
     } else {
       // mobile
       return Scaffold(
-        body: GradientContainer(hue: hue ?? 47, child: content),
+        body: GradientContainer( child: content),
         appBar: AppBar(
           title: const Text('Satori CI'),
-          backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
+          backgroundColor: HSLuvColor.fromHSL(hue , 100, 70).toColor(),
         ),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(
-            backgroundColor: HSLuvColor.fromHSL(hue ?? 0, 100, 70).toColor(),
+            backgroundColor: HSLuvColor.fromHSL(hue , 100, 70).toColor(),
             child: AppMenu(
               hue: hue,
             ),
@@ -101,10 +99,9 @@ class SplitView extends StatelessWidget {
 }
 
 class GradientContainer extends ConsumerWidget {
-  final double hue;
   final Widget child;
 
-  const GradientContainer({super.key, required this.hue, required this.child});
+  const GradientContainer({super.key,required this.child});
 
   @override
   Widget build(BuildContext context, ref) {
