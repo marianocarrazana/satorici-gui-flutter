@@ -34,49 +34,26 @@ class AppMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SatoriContainer(
-      margin: 12,
-      child: ListView(
-        children: <Widget>[
+        margin: 12,
+        child: ListView(children: <Widget>[
           // iterate through the keys to get the page names
           for (var page in _pageList)
-            Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: ref.watch(currentPage) == page['route']
-                      ? Colors.white.withOpacity(.16)
-                      : Colors.transparent,
-                ),
-                child: PageListTile(
-                    pageData: page,
-                    onPressed: () {
+            Material(
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
+                type: MaterialType.transparency,
+                child: ListTile(
+                    hoverColor: Colors.white12,
+                    selectedColor: Colors.white,
+                    textColor: Colors.white70,
+                    titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                    leading: Icon(page['icon']),
+                    title: Text(page['title']),
+                    selected: ref.watch(currentPage) == page['route'],
+                    onTap: () {
                       ref.read(currentPage.notifier).state = page['route'];
                       ref.read(pageHue.notifier).state = page['hue'];
                       Navigator.pushNamed(context, page['route']);
-                    })),
-        ],
-      ),
-    );
-  }
-}
-
-class PageListTile extends StatelessWidget {
-  const PageListTile({
-    Key? key,
-    required this.pageData,
-    this.onPressed,
-  }) : super(key: key);
-  final Map pageData;
-  final VoidCallback? onPressed;
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(pageData['icon']),
-      title: Text(
-        pageData['title'],
-        textAlign: TextAlign.left,
-        textScaleFactor: 1.5,
-      ),
-      onTap: onPressed,
-    );
+                    }))
+        ]));
   }
 }

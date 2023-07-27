@@ -13,11 +13,12 @@ class ResponsiveGrid extends ConsumerWidget {
   final List<Widget> children;
   final int widthExpected;
   final int heightExpected;
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //0=loading, 1=loaded, 2=cached, 3=error
-    final int _status = ref.watch(status);
-    switch (_status) {
+    final int statusRef = ref.watch(status);
+    switch (statusRef) {
       case 0:
         return const Center(
             child: CircularProgressIndicator(

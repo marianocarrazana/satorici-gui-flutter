@@ -22,65 +22,62 @@ class SplitView extends ConsumerWidget {
       return Scaffold(
           body: GradientContainer(
               child: Row(
+        children: [
+          SizedBox(
+            width: menuWidth,
+            child: AppMenu(),
+          ),
+          Expanded(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(
-                    width: menuWidth,
-                    child: AppMenu(),
-                  ),
-                  Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                  onTap: () {
-                                    const snackBar = SnackBar(
-                                        content: Text(
-                                            'Command copied to clipboard'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    Clipboard.setData(
-                                        ClipboardData(text: command));
-                                  },
-                                  child: Container(
-                                      margin: const EdgeInsets.all(8),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 8),
-                                      decoration: const BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8)),
-                                      ),
-                                      child: Row(children: [
-                                        Expanded(
-                                            child: Text(
-                                          command,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        )),
-                                        const Icon(
-                                          Icons.content_copy,
-                                          color: Colors.white,
-                                        )
-                                      ])))),
-                          Expanded(child: content)
-                        ]),
-                  ),
-                ],
-              )));
+                  MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                          onTap: () {
+                            const snackBar = SnackBar(
+                                content: Text('Command copied to clipboard'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                            Clipboard.setData(ClipboardData(text: command));
+                          },
+                          child: Container(
+                              margin: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Row(children: [
+                                Expanded(
+                                    child: Text(
+                                  command,
+                                  style: const TextStyle(color: Colors.white),
+                                )),
+                                const Icon(
+                                  Icons.content_copy,
+                                  color: Colors.white,
+                                )
+                              ])))),
+                  Expanded(child: content)
+                ]),
+          ),
+        ],
+      )));
     } else {
       // mobile
       return Scaffold(
         body: GradientContainer(child: content),
         appBar: AppBar(
           title: const Text('Satori CI'),
-          backgroundColor: HSLuvColor.fromHSL(hue, 100, 70).toColor(),
+          backgroundColor: HSLuvColor.fromHSL(hue, 65, 28).toColor(),
         ),
         drawer: SizedBox(
           width: menuWidth,
           child: Drawer(
-            backgroundColor: HSLuvColor.fromHSL(hue, 100, 70).toColor(),
+            backgroundColor: HSLuvColor.fromHSL(hue, 65, 20).toColor(),
             child: AppMenu(
               hue: hue,
             ),

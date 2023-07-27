@@ -27,7 +27,7 @@ class Repos extends ConsumerWidget {
     var listings = <Widget>[];
     for (var mon in repos) {
       var mon2 = Map<String, dynamic>.from(mon);
-      List toRemove = ['Repo', 'Result'];
+      List toRemove = ['repo', 'result'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
       listings.add(SatoriContainer(
           child: Column(children: [
@@ -50,9 +50,9 @@ class Repos extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     getFromApi('repos', ref.read(reposList.notifier), ref);
-    List todos = ref.watch(reposList);
+    List repos = ref.watch(reposList);
     return ResponsiveGrid(
-      children: _getListings(todos),
+      children: _getListings(repos),
     );
   }
 }

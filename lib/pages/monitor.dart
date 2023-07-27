@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api_handler.dart';
-import '../widgets/grid_renderer.dart';
+import '../widgets/key_renderer.dart';
+import '../widgets/responsive_grid.dart';
+import '../widgets/satori_container.dart';
 
 class MonitorsList extends StateNotifier<List> {
   MonitorsList(this.ref) : super([]);
@@ -15,16 +17,15 @@ class MonitorsList extends StateNotifier<List> {
 final monitorsList =
     StateNotifierProvider<MonitorsList, List>((ref) => MonitorsList(ref));
 
-
 class Monitor extends ConsumerWidget {
   const Monitor({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     getFromApi('monitors', ref.read(monitorsList.notifier), ref);
-    List todos = ref.watch(monitorsList);
-    return GridRenderer(
-          elements: todos,
-        );
+    List monitors = ref.watch(monitorsList);
+    return ResponsiveGrid(children: [
+      for (var monitor in monitors) SatoriContainer(child: KeyRenderer(monitor))
+    ]);
   }
 }
