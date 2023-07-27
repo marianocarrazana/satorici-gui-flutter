@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:satori_app/widgets/satori_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'states.dart';
@@ -19,12 +20,14 @@ class Home extends ConsumerWidget {
         loading: () => const CircularProgressIndicator(),
         error: (err, stack) => Text('Error: $err'),
         data: (_token) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.all(25.0),
-                  child: TextFormField(
+          return SatoriCard(
+            hoverEffect: false,
+            body: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
                     onFieldSubmitted: (e) {
                       _setToken(e);
                       ref.refresh(tokenProvider);
@@ -33,8 +36,8 @@ class Home extends ConsumerWidget {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                     ),
-                  )),
-            ],
+                  )
+                ]),
           );
         });
   }

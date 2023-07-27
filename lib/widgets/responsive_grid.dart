@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
-import 'states.dart';
+import '../states.dart';
 
 class ResponsiveGrid extends ConsumerWidget {
   const ResponsiveGrid(
       {super.key,
-      required this.elements,
+      required this.children,
       this.widthExpected = 480,
       this.heightExpected = 220});
-  final List<Widget> elements;
+  final List<Widget> children;
   final int widthExpected;
   final int heightExpected;
   @override
@@ -32,7 +32,7 @@ class ResponsiveGrid extends ConsumerWidget {
             crossAxisCount: columns,
             childAspectRatio: aspectRatio,
             padding: const EdgeInsets.all(2),
-            children: elements);
+            children: children);
     }
   }
 }

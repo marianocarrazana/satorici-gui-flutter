@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hsluv/hsluvcolor.dart';
 
 class TextStatus extends StatelessWidget {
   const TextStatus(this.data, {super.key});
@@ -14,12 +15,13 @@ class TextStatus extends StatelessWidget {
     if (isSuccess.hasMatch(data)) {
       icon = Icon(
         Icons.check_circle,
-        color: const Color.fromARGB(255, 63, 255, 70),
+        color: const HSLuvColor.fromHSL(135, 100, 63).toColor(),
         size: iconSize,
       );
     } else if (isFail.hasMatch(data)) {
       icon = Icon(Icons.cancel,
-          color: const Color.fromARGB(255, 255, 59, 45), size: iconSize);
+          color: const HSLuvColor.fromHSL(0, 100, 60).toColor(),
+          size: iconSize);
     } else {
       icon = Icon(Icons.error, color: Colors.orange, size: iconSize);
     }
@@ -37,7 +39,10 @@ class TextLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text("$label: ",style: const TextStyle(fontWeight: FontWeight.bold),),
+        Text(
+          "$label: ",
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         Text(data)
       ],
     );

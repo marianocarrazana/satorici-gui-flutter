@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:satori_app/text_widgets.dart';
+import 'package:satori_app/widgets/text_utils.dart';
 
 import 'api_handler.dart';
 import 'widgets/satori_container.dart';
 import 'key_renderer.dart';
-import 'responsive_grid.dart';
+import 'widgets/responsive_grid.dart';
 
 class ReposList extends StateNotifier<List> {
   ReposList(this.ref) : super([]);
@@ -55,7 +55,7 @@ class Repos extends ConsumerWidget {
     getFromApi('repos', ref.read(reposList.notifier), ref);
     List todos = ref.watch(reposList);
     return ResponsiveGrid(
-      elements: _getListings(todos),
+      children: _getListings(todos),
     );
   }
 }

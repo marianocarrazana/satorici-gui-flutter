@@ -33,10 +33,10 @@ class SatoriContainer extends ConsumerStatefulWidget {
   final double? width;
   final double? height;
   @override
-  ConsumerState<SatoriContainer> createState() => _FrostedContainer();
+  ConsumerState<SatoriContainer> createState() => _SatoriContainer();
 }
 
-class _FrostedContainer extends ConsumerState<SatoriContainer> {
+class _SatoriContainer extends ConsumerState<SatoriContainer> {
   bool _isHover = false;
 
   void updateIsHover(newState) {
@@ -49,10 +49,17 @@ class _FrostedContainer extends ConsumerState<SatoriContainer> {
   Widget build(BuildContext context) {
     double saturation = 66;
     double lightness = 20;
-    Color background =
-        HSLuvColor.fromHSL(ref.read(pageHue), saturation, lightness).toColor();
+    double hue = ref.read(pageHue);
+    Color background = HSLuvColor.fromHSL(hue, saturation, lightness).toColor();
     Color backgroundHover =
         HSLuvColor.fromColor(background).withLightness(25).toColor();
+    const BoxShadow shadow = BoxShadow(
+        color: Colors.black,
+        offset: Offset(0.0, 6.0),
+        spreadRadius: -6,
+        blurRadius: 6);
+    BoxShadow shadowHover = BoxShadow(
+        color: HSLColor.fromAHSL(1, hue, 0.85, 0.65).toColor(), blurRadius: 6);
     return MouseRegion(
         cursor: widget.cursor,
         onEnter: widget.hoverEffect ? (event) => updateIsHover(true) : null,
@@ -74,13 +81,7 @@ class _FrostedContainer extends ConsumerState<SatoriContainer> {
                   color: _isHover ? backgroundHover : background,
                   borderRadius:
                       BorderRadius.all(Radius.circular(widget.radius)),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(0.0, 6.0),
-                        spreadRadius: -6,
-                        blurRadius: 6),
-                  ],
+                  boxShadow: [_isHover ? shadowHover : shadow],
                 ),
                 child: widget.child,
               ),

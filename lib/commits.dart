@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_handler.dart';
-import 'grid_renderer.dart';
+import 'widgets/grid_renderer.dart';
 
 class CommitsList extends StateNotifier<List> {
   List list = [];

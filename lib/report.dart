@@ -8,7 +8,7 @@ import 'package:satori_app/report_chart.dart';
 import 'widgets/satori_container.dart';
 import 'api_handler.dart';
 import 'key_renderer.dart';
-import 'text_widgets.dart';
+import 'widgets/text_utils.dart';
 
 class ReportsList extends StateNotifier<List> {
   List list = [];

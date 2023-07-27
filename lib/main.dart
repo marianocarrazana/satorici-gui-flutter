@@ -31,6 +31,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
         title: 'SAPP',
         theme: ThemeData(
+          colorScheme: const ColorScheme.dark().copyWith(
+              primary: const HSLColor.fromAHSL(1, 76, 0.94, 0.5).toColor(),
+              secondary: const HSLColor.fromAHSL(1, 197, 0.94, 0.5).toColor()),
           brightness: Brightness.dark,
           fontFamily: GoogleFonts.getFont('PT Mono').fontFamily,
         ),

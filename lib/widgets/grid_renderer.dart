@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'states.dart';
-import 'widgets/satori_container.dart';
-import 'key_renderer.dart';
+import '../states.dart';
+import 'satori_container.dart';
+import '../key_renderer.dart';
 
 class GridRenderer extends ConsumerWidget {
   const GridRenderer({super.key, required this.elements});
