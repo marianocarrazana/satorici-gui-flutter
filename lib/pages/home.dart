@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/widgets/satori_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'states.dart';
+import '../states.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});

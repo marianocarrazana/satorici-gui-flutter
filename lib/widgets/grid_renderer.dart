@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../states.dart';
 import 'satori_container.dart';
-import '../key_renderer.dart';
+import 'key_renderer.dart';
 
 class GridRenderer extends ConsumerWidget {
   const GridRenderer({super.key, required this.elements});
@@ -14,10 +14,7 @@ class GridRenderer extends ConsumerWidget {
   List<Widget> _getListings() {
     var listings = <Widget>[];
     for (var mon in elements) {
-      listings.add(SatoriContainer(
-          child: KeyRenderer(
-        objList: mon,
-      )));
+      listings.add(SatoriContainer(child: KeyRenderer(mon)));
     }
     return listings;
   }

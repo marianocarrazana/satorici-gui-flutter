@@ -7,7 +7,7 @@ import 'package:satori_app/report_chart.dart';
 
 import 'widgets/satori_container.dart';
 import 'api_handler.dart';
-import 'key_renderer.dart';
+import 'widgets/key_renderer.dart';
 import 'widgets/text_utils.dart';
 
 class ReportsList extends StateNotifier<List> {
@@ -116,10 +116,6 @@ class _ExpandData extends State<ExpandData> {
               "Data",
             )),
         collapsed: Container(),
-        expanded: KeyRenderer(
-          objList: widget.data,
-          softWrap: true,
-          maxLines: null,
-        ));
+        expanded: KeyRenderer(widget.data, softWrap: true, maxLines: null));
   }
 }

@@ -15,18 +15,19 @@ class AppMenu extends ConsumerWidget {
       'icon': Icons.featured_play_list,
       "hue": 238.0
     },
-    {
-      'title': 'Commits',
-      'route': '/commits',
-      'icon': Icons.commit,
-      "hue": 298.0
-    },
+    {'title': 'Teams', 'route': '/teams', 'icon': Icons.people, "hue": 0.0},
     {'title': 'Repos', 'route': '/repos', 'icon': Icons.dashboard, "hue": 38.0},
     {
       'title': 'Monitor',
       'route': '/monitors',
       'icon': Icons.av_timer,
       "hue": 98.0
+    },
+    {
+      'title': 'Playbooks',
+      'route': '/playbooks',
+      'icon': Icons.av_timer,
+      "hue": 298.0
     },
   ];
 

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/widgets/satori_card.dart';
 
-import 'api_handler.dart';
-import 'states.dart';
-import 'widgets/satori_container.dart';
-import 'report.dart';
-import 'widgets/responsive_grid.dart';
-import 'splitview.dart';
-import 'widgets/text_utils.dart';
+import '../api_handler.dart';
+import '../states.dart';
+import '../widgets/satori_container.dart';
+import '../report.dart';
+import '../widgets/responsive_grid.dart';
+import '../splitview.dart';
+import '../widgets/text_utils.dart';
 
 class ReportsList extends StateNotifier<List> {
   ReportsList(this.ref) : super([]);

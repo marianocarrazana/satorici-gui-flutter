@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'commits.dart';
-import 'home.dart';
-import 'monitor.dart';
-import 'repos.dart';
-import 'reports.dart';
+import 'pages/home.dart';
+import 'pages/monitor.dart';
+import 'pages/playbooks.dart';
+import 'pages/repos.dart';
+import 'pages/teams.dart';
+import 'pages/reports.dart';
 import 'splitview.dart';
 
 void main() {
@@ -44,11 +45,11 @@ class MyApp extends ConsumerWidget {
                   settings,
                   const SplitView(
                       content: Reports(), command: "satori-cli report"));
-            case "/commits":
+            case "/teams":
               return _page(
                   settings,
                   const SplitView(
-                      content: Commits(), command: "satori-cli repo commits"));
+                      content: Teams(), command: "satori-cli team"));
             case "/repos":
               return _page(
                   settings,
@@ -59,6 +60,11 @@ class MyApp extends ConsumerWidget {
                   settings,
                   const SplitView(
                       content: Monitor(), command: "satori-cli monitor"));
+            case "/playbooks":
+              return _page(
+                  settings,
+                  const SplitView(
+                      content: Playbooks(), command: "satori-cli playbook"));
             default: //home
               return _page(settings,
                   const SplitView(content: Home(), command: "satori-cli"));

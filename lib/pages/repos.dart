@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/widgets/text_utils.dart';
 
-import 'api_handler.dart';
-import 'widgets/satori_container.dart';
-import 'key_renderer.dart';
-import 'widgets/responsive_grid.dart';
+import '../api_handler.dart';
+import '../widgets/satori_container.dart';
+import '../widgets/key_renderer.dart';
+import '../widgets/responsive_grid.dart';
 
 class ReposList extends StateNotifier<List> {
   ReposList(this.ref) : super([]);
@@ -41,10 +41,7 @@ class Repos extends ConsumerWidget {
               )),
               TextStatus(mon["result"])
             ])),
-        Expanded(
-            child: KeyRenderer(
-          objList: mon2,
-        ))
+        Expanded(child: KeyRenderer(mon2))
       ])));
     }
     return listings;

@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class KeyRenderer extends StatelessWidget {
-  const KeyRenderer(
-      {super.key,
-      required this.objList,
-      this.maxLines = 1,
-      this.softWrap = false});
+  const KeyRenderer(this.objList,
+      {super.key, this.maxLines = 1, this.softWrap = false});
   final Map<String, dynamic> objList;
   final int? maxLines;
   final bool softWrap;
