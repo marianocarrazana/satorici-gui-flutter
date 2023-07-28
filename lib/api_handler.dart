@@ -51,3 +51,16 @@ getFromApi(url, m, WidgetRef ref, {bool forceReload = false}) {
     }
   });
 }
+
+Future<Response> apiGet(url) async {
+  final getConnect = Client();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString('token') ?? "";
+  Map<String, String> requestHeaders = {
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token'
+  };
+  Response res = await getConnect.get(Uri.https('api.satori-ci.com', url),
+      headers: requestHeaders);
+  return res;
+}

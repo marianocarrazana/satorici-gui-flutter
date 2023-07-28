@@ -8,6 +8,7 @@ import 'pages/playbooks.dart';
 import 'pages/repos.dart';
 import 'pages/teams.dart';
 import 'pages/reports.dart';
+import 'report.dart';
 import 'splitview.dart';
 
 void main() {
@@ -65,6 +66,13 @@ class MyApp extends ConsumerWidget {
                   settings,
                   const SplitView(
                       content: Playbooks(), command: "satori-cli playbook"));
+            case "/report":
+              final args = settings.arguments as ReportArguments;
+              return _page(
+                  settings,
+                  SplitView(
+                      content: Report(args.id),
+                      command: "satori-cli report ${args.id}"));
             default: //home
               return _page(settings,
                   const SplitView(content: Home(), command: "satori-cli"));

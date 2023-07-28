@@ -27,7 +27,7 @@ final reportsList =
 class Reports extends ConsumerWidget {
   const Reports({super.key});
 
-  List<Widget> _getListings(List reports, WidgetRef ref) {
+  List<Widget> _getListings(List reports, BuildContext context, WidgetRef ref) {
     var listings = <Widget>[];
     const footerStyle = TextStyle(fontWeight: FontWeight.w300, fontSize: 10);
     for (var mon in reports) {
@@ -40,10 +40,8 @@ class Reports extends ConsumerWidget {
       }
       listings.add(SatoriCard(
           hoverEffect: true,
-          // onTap: () => Get.to(() => SplitView(
-          //     content: Report(uuid: report["id"]),
-          //     hue: 240,
-          //     command: "satori-cli report ${report["id"]}")),
+          onTap: () => Navigator.pushNamed(context, '/report',
+              arguments: ReportArguments(report["id"])),
           cursor: SystemMouseCursors.click,
           header: [
             Expanded(
@@ -105,7 +103,7 @@ class Reports extends ConsumerWidget {
     getFromApi('reports', ref.read(reportsList.notifier), ref);
     List reports = ref.watch(reportsList);
     return ResponsiveGrid(
-      children: _getListings(reports, ref),
+      children: _getListings(reports, context, ref),
     );
   }
 }

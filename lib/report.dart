@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 import 'package:satori_app/report_chart.dart';
 
 import 'widgets/satori_container.dart';
@@ -10,33 +12,48 @@ import 'api_handler.dart';
 import 'widgets/key_renderer.dart';
 import 'widgets/text_utils.dart';
 
+final reportProvider = FutureProvider.family<Map, String>((_, url) async {
+  Response res = await apiGet(url);
+  return jsonDecode(res.body);
+});
+
 class ReportsList extends StateNotifier<List> {
-  List list = [];
   ReportsList(this.ref) : super([]);
   final Ref ref;
   void updateList(newList) {
-    list = newList;
+    state = newList;
   }
 }
 
 final reportsList =
     StateNotifierProvider<ReportsList, List>((ref) => ReportsList(ref));
 
+class ReportArguments {
+  final String id;
+
+  ReportArguments(this.id);
+}
+
 class Report extends ConsumerWidget {
-  const Report({super.key, required this.uuid});
+  const Report(this.uuid, {super.key});
   final String uuid;
-  List<Widget> _getListings(WidgetRef ref) {
+
+  List<Widget> _getListings(Map reportData) {
     var listings = <Widget>[];
-    List rList = ref.read(reportsList.notifier).list;
-    if (rList.isEmpty) return listings;
-    List jsonData = rList[0]["json"];
+    if (reportData.isEmpty) return listings;
+    List jsonData = reportData["json"];
     for (var mon in jsonData) {
+      log(mon.toString());
       var mon2 = Map<String, dynamic>.from(mon);
       String test = mon2['test'] ?? "test";
       String testStatus = (mon2['test_status'] ?? mon2['status']) +
           (mon2['total_fails'] > 0 ? ('(${mon2['total_fails']})') : "");
       List toRemove = ['test', 'test_status', 'status', 'total_fails'];
       mon2.removeWhere((key, value) => toRemove.contains(key));
+      List gfx = [];
+      for (var x in mon["asserts"]) {
+        gfx.add([x["assert"], x["count"], mon["testcases"] - x["count"]]);
+      }
       listings.add(SatoriContainer(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -57,7 +74,7 @@ class Report extends ConsumerWidget {
         Container(
           height: 200,
           margin: const EdgeInsets.symmetric(vertical: 4),
-          child: ReportChart(data: mon2['gfx']),
+          child: ReportChart(data: gfx),
         ),
         Container(
             child: Column(children: [
@@ -71,12 +88,19 @@ class Report extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    getFromApi("reports/$uuid", ref.read(reportsList.notifier), ref,
-        forceReload: true);
-    return ListView(
-      shrinkWrap: true,
-      children: _getListings(ref),
-    );
+    AsyncValue<Map> reportAsserts = ref.watch(reportProvider("reports/$uuid"));
+    return reportAsserts.when(
+        loading: () => const Center(
+                child: CircularProgressIndicator(
+              color: Colors.white,
+            )),
+        error: (err, stack) => Text('Error: $err'),
+        data: (config) {
+          return ListView(
+            shrinkWrap: true,
+            children: _getListings(config),
+          );
+        });
   }
 }
 
@@ -89,7 +113,7 @@ class AssertContainer extends StatelessWidget {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(assertData["assert"]),
-        TextLabel("Expected", assertData["expected"]),
+        TextLabel("Expected", assertData["expected"].toString()),
         TextLabel("Fails", assertData["count"].toString()),
         TextStatus(assertData["status"])
       ]),
