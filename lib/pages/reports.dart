@@ -3,26 +3,19 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 import 'package:satori_app/widgets/satori_card.dart';
 
 import '../api_handler.dart';
 import '../states.dart';
-import '../widgets/satori_container.dart';
 import '../report.dart';
 import '../widgets/responsive_grid.dart';
-import '../splitview.dart';
 import '../widgets/text_utils.dart';
 
-class ReportsList extends StateNotifier<List> {
-  ReportsList(this.ref) : super([]);
-  final Ref ref;
-  void updateList(newList) {
-    state = newList;
-  }
-}
-
-final reportsList =
-    StateNotifierProvider<ReportsList, List>((ref) => ReportsList(ref));
+final reportsProvider = FutureProvider<Map>((_) async {
+  Response res = await apiGet("reports");
+  return jsonDecode(res.body);
+});
 
 class Reports extends ConsumerWidget {
   const Reports({super.key});
@@ -30,8 +23,8 @@ class Reports extends ConsumerWidget {
   List<Widget> _getListings(List reports, BuildContext context, WidgetRef ref) {
     var listings = <Widget>[];
     const footerStyle = TextStyle(fontWeight: FontWeight.w300, fontSize: 10);
-    for (var mon in reports) {
-      var report = mon["report"];
+    for (var report in reports) {
+      log(report.toString());
       var testCases = <Widget>[];
       if (report["testcases"] is List) {
         for (var test in report["testcases"]) {
@@ -60,26 +53,23 @@ class Reports extends ConsumerWidget {
             ...testCases,
             if (report['errors'] != null)
               Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 4),
-                      margin: const EdgeInsets.symmetric(vertical: 4),
-                      decoration: const BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "errors: ",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Expanded(
-                                child: Text(report['errors'],
-                                    overflow: TextOverflow.fade,
-                                    style:
-                                        const TextStyle(color: Colors.white))),
-                          ])))
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    const Icon(
+                      Icons.error_outline_outlined,
+                      color: Colors.redAccent,
+                      size: 15,
+                    ),
+                    const Text(
+                      "Errors: ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Expanded(
+                        child: Text(report['errors'],
+                            overflow: TextOverflow.fade,
+                            style: const TextStyle(color: Colors.white))),
+                  ]))
           ]),
           footer: [
             Expanded(
@@ -92,7 +82,7 @@ class Reports extends ConsumerWidget {
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: footerStyle)),
-            Text(mon['date'], style: footerStyle)
+            Text(report['date'], style: footerStyle)
           ]));
     }
     return listings;
@@ -100,10 +90,17 @@ class Reports extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    getFromApi('reports', ref.read(reportsList.notifier), ref);
-    List reports = ref.watch(reportsList);
-    return ResponsiveGrid(
-      children: _getListings(reports, context, ref),
-    );
+    AsyncValue<Map> reportsList = ref.watch(reportsProvider);
+    return reportsList.when(
+        loading: () => const Center(
+                child: CircularProgressIndicator(
+              color: Colors.white,
+            )),
+        error: (err, stack) => Text('Error: $err'),
+        data: (reports) {
+          return ResponsiveGrid(
+            children: _getListings(reports["list"], context, ref),
+          );
+        });
   }
 }

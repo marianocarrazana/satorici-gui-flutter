@@ -17,17 +17,6 @@ final reportProvider = FutureProvider.family<Map, String>((_, url) async {
   return jsonDecode(res.body);
 });
 
-class ReportsList extends StateNotifier<List> {
-  ReportsList(this.ref) : super([]);
-  final Ref ref;
-  void updateList(newList) {
-    state = newList;
-  }
-}
-
-final reportsList =
-    StateNotifierProvider<ReportsList, List>((ref) => ReportsList(ref));
-
 class ReportArguments {
   final String id;
 

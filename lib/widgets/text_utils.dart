@@ -23,7 +23,8 @@ class TextStatus extends StatelessWidget {
           color: const HSLuvColor.fromHSL(0, 100, 60).toColor(),
           size: iconSize);
     } else {
-      icon = Icon(Icons.error, color: Colors.orange, size: iconSize);
+      icon = Icon(Icons.warning_amber_rounded,
+          color: Colors.orange, size: iconSize);
     }
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
