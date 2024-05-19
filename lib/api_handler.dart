@@ -14,12 +14,12 @@ getFromApi(url, m, WidgetRef ref, {bool forceReload = false}) {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'
     };
-    String apiHost = 'https://api.satori-ci.com';
+    String apiHost = 'https://api.satori.ci';
     if (m.state.isEmpty || forceReload) {
       ref.read(status.notifier).state = 0;
       log('$apiHost/$url');
       getConnect
-          .get(Uri.https('api.satori-ci.com', url), headers: requestHeaders)
+          .get(Uri.https('api.satori.ci', url), headers: requestHeaders)
           .then((response) {
         log(response.statusCode.toString());
         if (response.statusCode == 200) {
@@ -60,7 +60,7 @@ Future<Response> apiGet(url) async {
     'Accept': 'application/json',
     'Authorization': 'Bearer $token'
   };
-  Response res = await getConnect.get(Uri.https('api.satori-ci.com', url),
+  Response res = await getConnect.get(Uri.https('api.satori.ci', url),
       headers: requestHeaders);
   return res;
 }
