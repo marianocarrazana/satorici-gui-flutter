@@ -13,7 +13,7 @@ class SatoriContainer extends ConsumerStatefulWidget {
     this.padding = 8.0,
     this.opacity = 0.12,
     this.borderColor,
-    this.borderWidth = 1.0,
+    this.borderWidth = 2.0,
     this.cursor = MouseCursor.defer,
     this.hoverEffect = false,
     this.onTap,
@@ -47,10 +47,13 @@ class _SatoriContainer extends ConsumerState<SatoriContainer> {
 
   @override
   Widget build(BuildContext context) {
-    double saturation = 66;
-    double lightness = 20;
+    double saturation = 0.33;
+    double lightness = 0.03;
     double hue = ref.read(pageHue);
-    Color background = HSLuvColor.fromHSL(hue, saturation, lightness).toColor();
+    Color background =
+        HSLColor.fromAHSL(1, hue, saturation, lightness).toColor();
+    Color borderColor1 = HSLColor.fromAHSL(1, hue, 1, 0.5).toColor();
+    Color borderColor2 = HSLColor.fromAHSL(1, hue + 180, 1, 0.5).toColor();
     Color backgroundHover =
         HSLuvColor.fromColor(background).withLightness(25).toColor();
     const BoxShadow shadow = BoxShadow(
@@ -71,20 +74,25 @@ class _SatoriContainer extends ConsumerState<SatoriContainer> {
               height: widget.height,
               margin: EdgeInsets.all(widget.margin),
               child: AnimatedContainer(
-                padding: EdgeInsets.all(widget.padding),
-                duration: const Duration(milliseconds: 300),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      width: widget.borderWidth,
-                      color: widget.borderColor ??
-                          const Color.fromARGB(100, 255, 255, 255)),
-                  color: _isHover ? backgroundHover : background,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(widget.radius)),
-                  boxShadow: [_isHover ? shadowHover : shadow],
-                ),
-                child: widget.child,
-              ),
+                  padding: const EdgeInsets.all(1.5),
+                  duration: const Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      transform: GradientRotation(60),
+                      colors: [borderColor1, borderColor2],
+                    ),
+                    borderRadius: BorderRadius.circular(widget.radius),
+                    boxShadow: [_isHover ? shadowHover : shadow],
+                  ),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: _isHover ? backgroundHover : background,
+                        borderRadius: BorderRadius.circular(widget.radius),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: widget.child,
+                      ))),
             )));
   }
 }

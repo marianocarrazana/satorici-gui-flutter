@@ -96,8 +96,8 @@ class GradientContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     double colorSpread = 24;
-    double saturation = 55;
-    double lightness = 16;
+    double saturation = 0.33;
+    double lightness = 0.03;
     double hue1 = ref.read(pageHue);
     double hue2 = (ref.read(pageHue) + colorSpread) % 360;
     double hue3 = (ref.read(pageHue) - colorSpread) % 360;
@@ -106,9 +106,9 @@ class GradientContainer extends ConsumerWidget {
           gradient: LinearGradient(
               transform: const GradientRotation(0.78),
               colors: <Color>[
-                HSLuvColor.fromHSL(hue1, saturation, lightness).toColor(),
-                HSLuvColor.fromHSL(hue2, saturation, lightness).toColor(),
-                HSLuvColor.fromHSL(hue3, saturation, lightness).toColor(),
+                HSLColor.fromAHSL(1, hue1, saturation, lightness).toColor(),
+                HSLColor.fromAHSL(1, hue2, saturation, lightness).toColor(),
+                HSLColor.fromAHSL(1, hue3, saturation, lightness).toColor(),
               ]),
         ),
         child: child);
