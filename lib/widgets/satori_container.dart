@@ -78,7 +78,7 @@ class _SatoriContainer extends ConsumerState<SatoriContainer> {
                   duration: const Duration(milliseconds: 300),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      transform: GradientRotation(60),
+                      transform: const GradientRotation(60),
                       colors: [borderColor1, borderColor2],
                     ),
                     borderRadius: BorderRadius.circular(widget.radius),
