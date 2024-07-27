@@ -41,6 +41,7 @@ dependencies:
   flutter_riverpod: ^2.3.6
   shared_preferences: ^2.2.0
   google_fonts: ^5.1.0
+  pluto_grid: ^8.0.0
 
 dev_dependencies:
   flutter_test:
