@@ -41,6 +41,7 @@ dependencies:
   flutter_riverpod: ^2.3.6
   shared_preferences: ^2.2.0
   google_fonts: ^5.1.0
+  syncfusion_flutter_datagrid: ^26.2.5
 
 dev_dependencies:
   flutter_test:

@@ -3,8 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/widgets/text_utils.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../api_handler.dart';
+import '../widgets/satori_container.dart';
+
 class TeamsList extends StateNotifier<List> {
   TeamsList(this.ref) : super([]);
   final Ref ref;
@@ -16,29 +19,33 @@ class TeamsList extends StateNotifier<List> {
 final teamsList =
     StateNotifierProvider<TeamsList, List>((ref) => TeamsList(ref));
 
-class _TeamsDataSource extends DataTableSource {
-  _TeamsDataSource(this.teams, this.ref);
-  final List teams;
-  final WidgetRef ref;
+class TeamDS extends DataGridSource {
+  TeamDS(List teams) {
+    _teams = teams
+        .map<DataGridRow>((e) => DataGridRow(cells: [
+              DataGridCell<String>(columnName: 'id', value: e["id"]),
+              DataGridCell<String>(columnName: 'name', value: e["name"]),
+              DataGridCell<String>(
+                  columnName: 'permissions', value: e["permissions"]),
+              DataGridCell<String>(columnName: 'owner', value: e["owner"]),
+            ]))
+        .toList();
+  }
+
+  List<DataGridRow> _teams = [];
+  @override
+  List<DataGridRow> get rows => _teams;
 
   @override
-  bool get isRowCountApproximate => false;
-  @override
-  int get rowCount => teams.length;
-  @override
-  int get selectedRowCount => 0;
-
-  @override
-  DataRow? getRow(int index) {
-    final team = teams[index];
-    return DataRow(
-      cells: [
-        DataCell(Text(team['id'])),
-        DataCell(Text(team['name'])),
-        DataCell(Text(team['permissions'])),
-        DataCell(Text(team['owner'])),
-      ],
-    );
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+        cells: row.getCells().map<Widget>((dataGridCell) {
+      return Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(16.0),
+        child: Text(dataGridCell.value.toString()),
+      );
+    }).toList());
   }
 }
 
@@ -50,15 +57,15 @@ class Teams extends ConsumerWidget {
     getFromApi('teams', ref.read(teamsList.notifier), ref);
     List teams = ref.watch(teamsList);
 
-    return PaginatedDataTable(
-      columns: const [
-        DataColumn(label: Text("ID")),
-        DataColumn(label: Text("Name")),
-        DataColumn(label: Text("Permissions")),
-        DataColumn(label: Text("Owner")),
+    return SatoriContainer(
+        child: SfDataGrid(
+      columns: [
+        GridColumn(columnName: 'id', label: Text("ID")),
+        GridColumn(columnName: 'name', label: Text("Name")),
+        GridColumn(columnName: 'permissions', label: Text("Permissions")),
+        GridColumn(columnName: 'owner', label: Text("Owner"))
       ],
-      source: _TeamsDataSource(teams, ref),
-      rowsPerPage: 15,
-    );
+      source: TeamDS(teams),
+    ));
   }
 }
