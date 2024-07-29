@@ -6,6 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:satori_app/widgets/text_utils.dart';
 
 import '../api_handler.dart';
+import '../widgets/dynamic_table.dart';
 
 class TeamsList extends StateNotifier<List> {
   TeamsList(this.ref) : super([]);
@@ -27,35 +28,6 @@ class Teams extends ConsumerWidget {
     List teams = ref.watch(teamsList);
     return teams.isEmpty
         ? Text("Loading")
-        : PlutoGrid(
-            columns: [
-                PlutoColumn(
-                  title: 'ID',
-                  field: 'id',
-                  type: PlutoColumnType.text(),
-                ),
-                PlutoColumn(
-                  title: 'Name',
-                  field: 'name',
-                  type: PlutoColumnType.text(),
-                ),
-              ],
-            rows: [
-                for (var team in teams)
-                  PlutoRow(
-                    cells: {
-                      'id': PlutoCell(value: team["id"]),
-                      "name": PlutoCell(
-                        value: team["name"],
-                      )
-                    },
-                  ),
-              ],
-            onChanged: (PlutoGridOnChangedEvent event) {
-              print(event);
-            },
-            onLoaded: (PlutoGridOnLoadedEvent event) {
-              print(event);
-            });
+        : DynamicTable(teams);
   }
 }
