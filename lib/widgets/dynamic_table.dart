@@ -22,22 +22,26 @@ class DynamicTable extends StatelessWidget {
     }
     log(objList.toString());
 
-    return PlutoGrid(
-      configuration: const PlutoGridConfiguration.dark(),
-      columns: [
-        for (var key in objList[0].keys)
-          PlutoColumn(
-            title: key.toUpperCase(),
-            field: key,
-            type: PlutoColumnType.text(),
-          )
-      ],
-      rows: [
-        for (var obj in objList)
-          PlutoRow(
-            cells: {for (var key in obj.keys) key: PlutoCell(value: obj[key])},
-          ),
-      ],
-    );
+    return objList.isEmpty
+        ? const Text("No items")
+        : PlutoGrid(
+            configuration: const PlutoGridConfiguration.dark(),
+            columns: [
+              for (var key in objList[0].keys)
+                PlutoColumn(
+                  title: key.toUpperCase(),
+                  field: key,
+                  type: PlutoColumnType.text(),
+                )
+            ],
+            rows: [
+              for (var obj in objList)
+                PlutoRow(
+                  cells: {
+                    for (var key in obj.keys) key: PlutoCell(value: obj[key])
+                  },
+                ),
+            ],
+          );
   }
 }
