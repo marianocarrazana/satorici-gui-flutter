@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api_handler.dart';
-import '../widgets/satori_container.dart';
-import '../widgets/key_renderer.dart';
-import '../widgets/responsive_grid.dart';
+import '../widgets/dynamic_table.dart';
 
 class PlaybooksList extends StateNotifier<List> {
   PlaybooksList(this.ref) : super([]);
@@ -24,11 +22,8 @@ class Playbooks extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     getFromApi('playbooks', ref.read(playbooksList.notifier), ref);
     List playbooks = ref.watch(playbooksList);
-    return ResponsiveGrid(
-      children: [
-        for (var playbook in playbooks)
-          SatoriContainer(child: KeyRenderer(playbook))
-      ],
-    );
+    return playbooks.isEmpty
+        ? const Text("Loading...")
+        : DynamicTable(playbooks);
   }
 }

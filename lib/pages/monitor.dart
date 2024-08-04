@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api_handler.dart';
-import '../widgets/key_renderer.dart';
-import '../widgets/responsive_grid.dart';
-import '../widgets/satori_container.dart';
+import '../widgets/dynamic_table.dart';
 
 class MonitorsList extends StateNotifier<List> {
   MonitorsList(this.ref) : super([]);
@@ -24,8 +22,6 @@ class Monitor extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     getFromApi('monitors', ref.read(monitorsList.notifier), ref);
     List monitors = ref.watch(monitorsList);
-    return ResponsiveGrid(children: [
-      for (var monitor in monitors) SatoriContainer(child: KeyRenderer(monitor))
-    ]);
+    return monitors.isEmpty ? const Text("Loading...") : DynamicTable(monitors);
   }
 }
