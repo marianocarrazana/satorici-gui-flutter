@@ -50,6 +50,7 @@ class _SatoriContainer extends ConsumerState<SatoriContainer> {
     double saturation = 0.33;
     double lightness = 0.03;
     double hue = ref.read(pageHue);
+    hue = hue >= 180.0 ? hue - 180 : hue;
     Color background =
         HSLColor.fromAHSL(1, hue, saturation, lightness).toColor();
     Color borderColor1 = HSLColor.fromAHSL(1, hue, 1, 0.5).toColor();
