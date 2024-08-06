@@ -37,8 +37,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.19.0
-      - run: flutter build web --base-href satorici-gui-flutter
+          flutter-version: 3.22.3
+      - run: flutter build web --base-href /satorici-gui-flutter/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
