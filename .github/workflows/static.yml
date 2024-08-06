@@ -37,12 +37,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: pubspec.yaml # path to pubspec.yaml
+          flutter-version: 3.19.0
       - run: flutter build web --base-href satorici-gui-flutter
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: './build/web'
       - name: Deploy to GitHub Pages
         id: deployment
