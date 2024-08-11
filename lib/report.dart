@@ -30,7 +30,7 @@ class Report extends ConsumerWidget {
   List<Widget> _getListings(Map reportData) {
     var listings = <Widget>[];
     if (reportData.isEmpty) return listings;
-    List jsonData = reportData["json"];
+    List jsonData = reportData["report"];
     for (var mon in jsonData) {
       log(mon.toString());
       var mon2 = Map<String, dynamic>.from(mon);
@@ -106,7 +106,7 @@ class AssertContainer extends StatelessWidget {
         TextLabel("Fails", assertData["count"].toString()),
         TextStatus(assertData["status"])
       ]),
-      for (var data in assertData["data"]) ExpandData(data: data)
+      //for (var data in assertData["data"]) ExpandData(data: data)
     ]);
   }
 }
