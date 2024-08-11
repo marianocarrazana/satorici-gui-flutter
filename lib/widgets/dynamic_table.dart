@@ -1,17 +1,16 @@
-import 'dart:convert';
 import "dart:developer";
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DynamicTable extends StatelessWidget {
-  const DynamicTable(this.obj, {super.key});
+  const DynamicTable(this.obj, {this.renderers = const {}, super.key});
   final dynamic obj;
+  final Map<String, Widget Function(PlutoColumnRendererContext)> renderers;
 
   @override
   Widget build(BuildContext context) {
     List objList;
-    log(obj.runtimeType.toString());
     if (obj is List<Map<String, dynamic>> && obj[0].containsKey("rows")) {
       //Bootstrap table list
       objList = obj[0]["rows"];
@@ -29,10 +28,11 @@ class DynamicTable extends StatelessWidget {
             columns: [
               for (var key in objList[0].keys)
                 PlutoColumn(
-                  title: key.toUpperCase(),
-                  field: key,
-                  type: PlutoColumnType.text(),
-                )
+                    title: key.toUpperCase(),
+                    field: key,
+                    type: PlutoColumnType.text(),
+                    renderer:
+                        renderers.containsKey(key) ? renderers[key] : null)
             ],
             rows: [
               for (var obj in objList)
