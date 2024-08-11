@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api_handler.dart';
+import '../report.dart';
 import '../widgets/dynamic_table.dart';
 
 class ReportsList extends StateNotifier<List> {
@@ -25,6 +26,19 @@ class Reports extends ConsumerWidget {
     getFromApi('reports', ref.read(reportsList.notifier), ref);
     List reports = ref.watch(reportsList);
     log(reports.toString());
-    return reports.isEmpty ? const Text("Loading...") : DynamicTable(reports);
+    return reports.isEmpty
+        ? const Text("Loading...")
+        : DynamicTable(reports, renderers: {
+            "id": (rendererContext) {
+              String reportId = rendererContext.cell.value.toString();
+              return TextButton(
+                  onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Report(reportId),
+                        ),
+                      ),
+                  child: Text(reportId));
+            }
+          });
   }
 }
