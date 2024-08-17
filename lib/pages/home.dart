@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:satori_app/widgets/satori_card.dart';
@@ -8,18 +10,19 @@ import '../states.dart';
 class Home extends ConsumerWidget {
   const Home({super.key});
 
-  void _setToken(String newToken) async {
+  void _setConfig(String key, String newValue) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', newToken);
+    prefs.setString(key, newValue);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<String> token = ref.watch(tokenProvider);
-    return token.when(
+    AsyncValue<Map<String, String>> globalConfig =
+        ref.watch(globalConfigProvider);
+    return globalConfig.when(
         loading: () => const CircularProgressIndicator(),
         error: (err, stack) => Text('Error: $err'),
-        data: (_token) {
+        data: (_config) {
           return SatoriCard(
             hoverEffect: false,
             body: Column(
@@ -28,12 +31,28 @@ class Home extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
-                    onFieldSubmitted: (e) {
-                      _setToken(e);
-                      ref.refresh(tokenProvider);
+                    obscureText: false,
+                    onChanged: (e) {
+                      _setConfig("host", e);
+                      ref.refresh(globalConfigProvider);
                     },
-                    initialValue: _token,
+                    initialValue: _config["host"],
                     decoration: const InputDecoration(
+                      labelText: "Host",
+                      hintText: "Satori api host url",
+                      border: UnderlineInputBorder(),
+                    ),
+                  ),
+                  TextFormField(
+                    obscureText: false,
+                    onChanged: (e) {
+                      _setConfig("token", e);
+                      ref.refresh(globalConfigProvider);
+                    },
+                    initialValue: _config["token"],
+                    decoration: const InputDecoration(
+                      labelText: "Token",
+                      hintText: "Team or personal token from satori.ci",
                       border: UnderlineInputBorder(),
                     ),
                   )

@@ -10,11 +10,11 @@ getFromApi(url, m, WidgetRef ref, {bool forceReload = false}) {
   final getConnect = Client();
   SharedPreferences.getInstance().then((prefs) {
     String token = prefs.getString('token') ?? "";
+    String apiHost = prefs.getString('host') ?? "https://api.satori.ci";
     Map<String, String> requestHeaders = {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'
     };
-    String apiHost = 'https://api.satori.ci';
     if (m.state.isEmpty || forceReload) {
       ref.read(status.notifier).state = 0;
       log('$apiHost/$url');
@@ -56,11 +56,12 @@ Future<Response> apiGet(url) async {
   final getConnect = Client();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String token = prefs.getString('token') ?? "";
+  String apiHost = prefs.getString('host') ?? "https://api.satori.ci";
   Map<String, String> requestHeaders = {
     'Accept': 'application/json',
     'Authorization': 'Bearer $token'
   };
-  Response res = await getConnect.get(Uri.https('api.satori.ci', url),
-      headers: requestHeaders);
+  Response res =
+      await getConnect.get(Uri.parse("$apiHost/$url"), headers: requestHeaders);
   return res;
 }

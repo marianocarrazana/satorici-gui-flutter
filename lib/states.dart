@@ -7,7 +7,10 @@ final pageHue = StateProvider<double>((ref) => 138.0);
 final status =
     StateProvider<int>((ref) => 0); //0=loading, 1=loaded, 2=cached, 3=error
 
-final tokenProvider = FutureProvider<String>((ref) async {
+final globalConfigProvider = FutureProvider<Map<String, String>>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('token') ?? "";
+  return {
+    "host": prefs.getString('host') ?? "https://api.satori.ci",
+    "token": prefs.getString('token') ?? ""
+  };
 });
