@@ -32,11 +32,8 @@ class Reports extends ConsumerWidget {
             "id": (rendererContext) {
               String reportId = rendererContext.cell.value.toString();
               return TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Report(reportId),
-                        ),
-                      ),
+                  onPressed: () => Navigator.pushNamed(context, "/report",
+                      arguments: ReportArguments(reportId)),
                   child: Text(reportId));
             }
           });

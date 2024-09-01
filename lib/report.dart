@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -28,31 +27,35 @@ class Report extends ConsumerWidget {
   final String uuid;
 
   List<Widget> _getListings(Map reportData) {
-    var listings = <Widget>[];
-    if (reportData.isEmpty) return listings;
+    var testsList = <Widget>[];
+    if (reportData.isEmpty) return testsList;
     List jsonData = reportData["report"];
-    for (var mon in jsonData) {
-      log(mon.toString());
-      var mon2 = Map<String, dynamic>.from(mon);
-      String test = mon2['test'] ?? "test";
-      String testStatus = (mon2['test_status'] ?? mon2['status']) +
-          (mon2['total_fails'] > 0 ? ('(${mon2['total_fails']})') : "");
+    for (var singleTest in jsonData) {
+      var test2 = Map<String, dynamic>.from(singleTest);
+      var command = test2["data"]["original"];
+      String testName = test2['test'] ?? "test";
+      String testStatus = (test2['test_status'] ?? test2['status']) +
+          (test2['total_fails'] > 0 ? ('(${test2['total_fails']})') : "");
       List toRemove = ['test', 'test_status', 'status', 'total_fails'];
-      mon2.removeWhere((key, value) => toRemove.contains(key));
+      test2.removeWhere((key, value) => toRemove.contains(key));
       List gfx = [];
-      for (var x in mon["asserts"]) {
-        gfx.add([x["assert"], x["count"], mon["testcases"] - x["count"]]);
+      for (var x in singleTest["asserts"]) {
+        gfx.add(
+            [x["assert"], x["count"], singleTest["testcases"] - x["count"]]);
       }
-      listings.add(SatoriContainer(
+      testsList.add(SatoriContainer(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(
+          children: [Text(command)],
+        ),
         Stack(children: [
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [TextLabel("Testcases", mon2["testcases"].toString())]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TextLabel("Testcases", test2["testcases"].toString())
+          ]),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(
-              test,
+              testName,
               style: const TextStyle(fontWeight: FontWeight.bold),
               overflow: TextOverflow.fade,
               softWrap: false,
@@ -65,14 +68,14 @@ class Report extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(vertical: 4),
           child: ReportChart(data: gfx),
         ),
-        Container(
-            child: Column(children: [
-          for (var asserts in mon2["asserts"])
+        ExpandData(data: test2["data"]["output"] ?? {}),
+        Column(children: [
+          for (var asserts in test2["asserts"])
             AssertContainer(assertData: asserts)
-        ]))
+        ])
       ])));
     }
-    return listings;
+    return testsList;
   }
 
   @override
@@ -105,8 +108,7 @@ class AssertContainer extends StatelessWidget {
         TextLabel("Expected", assertData["expected"].toString()),
         TextLabel("Fails", assertData["count"].toString()),
         TextStatus(assertData["status"])
-      ]),
-      //for (var data in assertData["data"]) ExpandData(data: data)
+      ])
     ]);
   }
 }
